@@ -1,0 +1,34 @@
+.boardContainer {
+    height: calc(100vh - 139px);
+    width: calc(25%);
+    min-width: 175px;
+    margin-right: 16px;
+    box-shadow: 2px 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+#Todo {
+    margin-left: 16px;
+}
+
+.task-Section {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    height: calc(100% - 48px);
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.heading {
+    display: flex;
+    justify-content: space-between;
+    align-content: center;
+    background-color: #1976d2;
+    padding: 4px 4px 4px 4px;
+    color: white;
+}
+
+.MuiTypography-root {
+    align-self: center;
+}
+
+.MuiButtonBase-root {
+    color: white !important;
+}

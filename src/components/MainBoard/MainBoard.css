@@ -1,0 +1,9 @@
+.headlineContainer {
+    padding-top: 16px;
+}
+
+.board {
+    margin-top: 16px;
+    display: flex;
+    border-radius: 10px;
+}
