@@ -3,16 +3,55 @@ import React from "react";
 import AddButton from "../AddButton/AddButton.js";
 import { Typography } from "@mui/material";
 import BoardContainer from "../BoardContainer/BoardContainer";
+import TaskDetail from "../TaskDetail/TaskDetail";
 
 class MainBoard extends React.Component {
-  categories = ["Todo", "In progress", "Testing", "Done"];
+  categories = ["To do", "In progress", "Testing", "Done"];
   state = {
     tasks: [
-      { id: 1, title: "Test", category: "Todo" },
-      { id: 0, title: "Test1", category: "Todo" },
-      { id: 2, title: "Test2", category: "In progress" },
+      {
+        id: 1,
+        title: "Test",
+        category: "To do",
+        urgency: "Sehr Dringend",
+        description:
+          "loreflksdajfklsnfjksfnkjasdnfsnfjksnkk  fd fjks fsdjf kjsdf jkf",
+        user: "Niklas",
+      },
+      {
+        id: 0,
+        title: "Test1",
+        category: "To do",
+        urgency: "Sehr Dringend",
+        description:
+          "loreflksdajfklsnfjksfnkjasdnfsnfjksnkk  fd fjks fsdjf kjsdf jkf",
+        user: "Niklas",
+      },
+      {
+        id: 2,
+        title: "Test2",
+        category: "In progress",
+        urgency: "Sehr Dringend",
+        description:
+          "loreflksdajfklsnfjksfnkjasdnfsnfjksnkk  fd fjks fsdjf kjsdf jkf",
+        user: "Niklas",
+      },
     ],
     currentDraggedElement: 0,
+    openDetail: false,
+    pickedTask: {},
+  };
+
+  openTaskDetail = (id) => {
+    console.log(id);
+    let [pickedTask] = this.state.tasks.filter((task) => task.id == id);
+    this.setState({
+      pickedTask: pickedTask,
+      openDetail: true,
+    });
+  };
+  setOpenDetail = (bool) => {
+    this.setState({ openDetail: bool });
   };
 
   changeDraggedElement = (id) => {
@@ -46,10 +85,11 @@ class MainBoard extends React.Component {
         <div className="mainContainer">
           <div className="headlineContainer">
             <Typography align="center" variant="h4">
-              Board Name
-            </Typography>
-          </div>
+              Board Name{" "}
+            </Typography>{" "}
+          </div>{" "}
           <div className="board">
+            {" "}
             {this.categories.map((cat) => (
               <BoardContainer
                 key={cat}
@@ -57,10 +97,16 @@ class MainBoard extends React.Component {
                 tasks={this.getTasks(cat)}
                 changeDraggedElement={this.changeDraggedElement}
                 changeCategory={this.changeCategory}
+                openDetail={this.openTaskDetail}
               />
-            ))}
-          </div>
-        </div>
+            ))}{" "}
+          </div>{" "}
+        </div>{" "}
+        <TaskDetail
+          open={this.state.openDetail}
+          setOpen={this.setOpenDetail}
+          task={this.state.pickedTask}
+        ></TaskDetail>
       </div>
     );
   }

@@ -12,8 +12,9 @@ export default function Task(props) {
       className="taskCard"
       draggable="true"
       onDragStart={() => startDragging(props.task.id)}
+      onClick={() => props.openDetail(props.task.id)}
     >
-      <Typography variant="h6">{props.task.title}</Typography>
+      <Typography variant="h6"> {props.task.title} </Typography>{" "}
     </Card>
   );
 }

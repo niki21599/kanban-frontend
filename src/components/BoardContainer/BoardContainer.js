@@ -5,13 +5,19 @@ import IconButton from "@mui/material/IconButton";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 import AddIcon from "@mui/icons-material/Add";
 import Task from "../Task/Task";
+import AddTask from "../AddTask/AddTask";
 
 export default function BoardContainer(props) {
+  const [addTask, setAddTask] = React.useState(false);
   let moveTo = (category) => {
     props.changeCategory(category);
   };
   let allowDrop = (event) => {
     event.preventDefault();
+  };
+
+  const handleAddTask = () => {
+    setAddTask(true);
   };
   return (
     <div className="boardContainer" id={props.title}>
@@ -19,7 +25,7 @@ export default function BoardContainer(props) {
         <Typography align="left" variant="h5">
           {props.title}
         </Typography>
-        <IconButton>
+        <IconButton className="white" onClick={handleAddTask}>
           <AddIcon />
         </IconButton>
       </div>
@@ -33,9 +39,15 @@ export default function BoardContainer(props) {
             task={task}
             key={task.title}
             changeDraggedElement={props.changeDraggedElement}
+            openDetail={props.openDetail}
           />
         ))}
       </div>
+      <AddTask
+        open={addTask}
+        setOpen={setAddTask}
+        category={props.title}
+      ></AddTask>
     </div>
   );
 }
