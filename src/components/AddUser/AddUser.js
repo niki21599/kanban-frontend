@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import "./AddUser.css";
 import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -16,17 +15,8 @@ export default function AddUser(props) {
   const { open, setOpen, board } = props;
   const [possibleUsers, setPossibleUsers] = React.useState([]);
   const [checked, setChecked] = React.useState([]);
-  let refresh = true;
 
-  const refreshPossibleUsers = () => {
-    refresh = !refresh;
-    console.log(" Refresh");
-  };
-
-  // Fehlermeldung mit controlled uncontrolled
   useEffect(() => {
-    console.log(" Refresh");
-    console.log(board.fields.users);
     getUsersNotAddedToBoard(board.pk).then((result) => {
       setPossibleUsers(result);
       let newChecked = new Array(possibleUsers.length).fill(false);
@@ -35,7 +25,6 @@ export default function AddUser(props) {
   }, [board]);
 
   const handleClose = () => {
-    console.log("The Checked Array", checked);
     let user_ids = [];
     for (let index = 0; index < possibleUsers.length; index++) {
       const element = checked[index];
@@ -46,8 +35,6 @@ export default function AddUser(props) {
 
     addUserToBoard(board.pk, user_ids);
     props.addUserToBoard(user_ids);
-    refreshPossibleUsers();
-
     setOpen(false);
     resetState();
   };
@@ -60,15 +47,11 @@ export default function AddUser(props) {
     setChecked([]);
   };
   const handleChange = (event, index) => {
-    console.log("Checked?", index);
-    console.log("the Value", event.target.value);
-
     let items = [...checked];
     let item = { ...items[index] };
     item = event.target.checked;
     items[index] = item;
     setChecked(items);
-    console.log(checked);
   };
 
   return (

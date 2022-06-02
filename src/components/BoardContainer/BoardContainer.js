@@ -2,7 +2,6 @@ import React from "react";
 import "./BoardContainer.css";
 import { Typography } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
-import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 import AddIcon from "@mui/icons-material/Add";
 import Task from "../Task/Task";
 import AddTask from "../AddTask/AddTask";

@@ -1,7 +1,6 @@
 import React from "react";
 import "./AddButton.css";
-import Box from "@mui/material/Box";
-import Backdrop from "@mui/material/Backdrop";
+
 import SpeedDial from "@mui/material/SpeedDial";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
@@ -13,7 +12,6 @@ import AddBoard from "../AddBoard/AddBoard";
 
 import AddTask from "../AddTask/AddTask";
 import AddUser from "../AddUser/AddUser";
-import { PropaneSharp } from "@mui/icons-material";
 
 const actions = [
   { icon: <AssignmentOutlinedIcon />, name: "New Task" },
@@ -30,7 +28,6 @@ export default function AddButton(props) {
   const handleClose = () => setOpen(false);
 
   const openDialog = (name) => {
-    console.log(name);
     if (name === "New Task") {
       setAddTask(true);
     }
@@ -74,13 +71,13 @@ export default function AddButton(props) {
         board={props.board}
         addTask={props.addTask}
         category="To do"
-      ></AddTask>
+      ></AddTask>{" "}
       <AddUser
         open={addUser}
         setOpen={setAddUser}
         board={props.board}
         addUserToBoard={props.addUserToBoard}
-      ></AddUser>
+      ></AddUser>{" "}
     </div>
   );
 }

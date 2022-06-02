@@ -28,9 +28,6 @@ class MainBoard extends React.Component {
   };
 
   openTaskDetail = (id) => {
-    console.log("The id of the task is: ", id);
-    console.log("The props: ", this.props.tasks);
-
     let [pickedTask] = this.props.tasks.filter((task) => task.pk == id);
     this.setState({
       pickedTask: pickedTask,
@@ -45,7 +42,7 @@ class MainBoard extends React.Component {
     this.setState({ currentDraggedElement: id });
   };
 
-  getTasks = (cat) => {
+  getTasksOfCategory = (cat) => {
     let tasks = this.props.tasks.filter((task) => task.fields.category == cat);
     return tasks;
   };
@@ -61,15 +58,17 @@ class MainBoard extends React.Component {
     item.fields.category = cat;
     leftItems.push(item);
     this.props.handleChangeCat(leftItems);
-    console.log("Chnged Task", item);
+
     saveChangeCategory(item.pk, item.fields.category);
   };
 
   render() {
     return (
       <div>
+        {" "}
         {this.props.loggedIn ? (
           <div>
+            {" "}
             {this.props.boardsAdded ? (
               <div>
                 <AddButton
@@ -96,7 +95,7 @@ class MainBoard extends React.Component {
                         <BoardContainer
                           key={cat}
                           title={cat}
-                          tasks={this.getTasks(cat)}
+                          tasks={this.getTasksOfCategory(cat)}
                           changeDraggedElement={this.changeDraggedElement}
                           changeCategory={this.changeCategory}
                           openDetail={this.openTaskDetail}
@@ -106,17 +105,18 @@ class MainBoard extends React.Component {
                       );
                     })}{" "}
                   </div>{" "}
-                </div>
+                </div>{" "}
                 <TaskDetail
                   open={this.state.openDetail}
                   setOpen={this.setOpenDetail}
                   task={this.state.pickedTask}
+                  setOpenDetail={this.setOpenDetail}
                   handleChangeCatWithOne={this.props.handleChangeCatWithOne}
                   changeUrgency={this.props.changeUrgency}
                   changeUser={this.props.changeUser}
                   board={this.props.board}
                   deleteTask={this.props.deleteTask}
-                ></TaskDetail>
+                ></TaskDetail>{" "}
               </div>
             ) : (
               <NoBoards

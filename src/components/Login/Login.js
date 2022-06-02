@@ -21,15 +21,12 @@ class Login extends React.Component {
     this.setState({
       [e.currentTarget.id]: e.currentTarget.value,
     });
-    console.log(this.state);
   };
   handleSubmit = (e) => {
     e.preventDefault();
     login(this.state.username, this.state.password).then((result) => {
-      this.setState();
       if (result.token) {
         this.props.login(result.token);
-        console.log("Login ", result.token);
       } else {
         this.setState({ username: "", password: "", wrongData: true });
       }

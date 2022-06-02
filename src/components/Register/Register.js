@@ -24,7 +24,6 @@ class Register extends React.Component {
   handleChange = (e) => {
     this.setState({ [e.currentTarget.id]: e.currentTarget.value });
     this.setState({ passwordError: false, usernameError: false });
-    console.log(this.state);
   };
   handleSubmit = (e) => {
     e.preventDefault();
@@ -37,7 +36,6 @@ class Register extends React.Component {
       this.state.first_name,
       this.state.last_name
     ).then((result) => {
-      console.log(result);
       if (result.token) {
         this.props.login(result.token);
       } else if (result.errorMessage == "Username already exists") {

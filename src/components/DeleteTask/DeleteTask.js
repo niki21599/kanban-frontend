@@ -15,6 +15,7 @@ export default function DeleteTask(props) {
     props.deleteTask(task.pk);
     deleteTask(task.pk).then((result) => {
       setOpen(false);
+      props.setOpenDetail(false);
     });
   };
   const handleCancel = () => {

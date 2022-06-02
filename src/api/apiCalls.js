@@ -8,11 +8,10 @@ export async function login(username, password) {
         body: formData,
     });
     let result = await response.json();
-    console.log("Response", result);
+
     return result;
 }
 
-// Register: /register/
 export async function register(
     username,
     password,
@@ -34,14 +33,12 @@ export async function register(
         body: formData,
     });
     let result = await response.json();
-    console.log("Response", result);
+
     return result;
 }
 
-// Get Boards /board/
 export async function getBoards() {
     let token = "Token " + localStorage.getItem("token");
-    console.log(token);
 
     let response = await fetch("http://127.0.0.1:8000/board/", {
         method: "GET",
@@ -52,8 +49,6 @@ export async function getBoards() {
     let result = await response.json();
     return result;
 }
-
-// Get Tasks of Board: /task/
 
 export async function getTasks(board_id) {
     let token = "Token " + localStorage.getItem("token");
@@ -67,11 +62,10 @@ export async function getTasks(board_id) {
         }
     );
     let result = await response.json();
-    console.log("Response", result);
+
     return result;
 }
 
-// Add Board: /board/add/
 export async function addBoard(name) {
     let token = "Token " + localStorage.getItem("token");
 
@@ -86,11 +80,10 @@ export async function addBoard(name) {
         body: formData,
     });
     let result = await response.json();
-    console.log("Response", result);
+
     return result;
 }
 
-// Add Task: /task/add/
 export async function addTask(
     title,
     urgency,
@@ -119,10 +112,10 @@ export async function addTask(
         body: formData,
     });
     let result = await response.json();
-    console.log("Response", result);
+
     return result;
 }
-// Add User to Board: /board/add/user/
+
 export async function addUserToBoard(board_id, user_ids) {
     let token = "Token " + localStorage.getItem("token");
 
@@ -138,13 +131,11 @@ export async function addUserToBoard(board_id, user_ids) {
         body: formData,
     });
     let result = await response.json();
-    console.log("Response", result);
+
     return result;
 }
 
-// Get all Users from Board: /task/user/
 export async function getUsersFromBoard(board_id) {
-    //Get the Token of authenticated User:
     let token = "Token " + localStorage.getItem("token");
 
     let response = await fetch(
@@ -156,11 +147,10 @@ export async function getUsersFromBoard(board_id) {
         }
     );
     let result = await response.json();
-    console.log("Response", result);
+
     return result;
 }
 
-// Get all Users not in the Board: /board/user/
 export async function getUsersNotAddedToBoard(board_id) {
     let token = "Token " + localStorage.getItem("token");
 
@@ -173,11 +163,9 @@ export async function getUsersNotAddedToBoard(board_id) {
         }
     );
     let result = await response.json();
-    console.log("Response", result);
+
     return result;
 }
-
-// Remove a User from the Board: /board/remove/user/
 
 export async function removeUserFromBoard() {
     let token = "Token " + localStorage.getItem("token");
@@ -194,7 +182,7 @@ export async function removeUserFromBoard() {
         body: formData,
     });
     let result = await response.json();
-    console.log("Response", result);
+
     return result;
 }
 
@@ -210,7 +198,7 @@ export async function getUser(user_id) {
         }
     );
     let result = await response.json();
-    console.log("Response", result);
+
     return result;
 }
 
@@ -229,8 +217,6 @@ export async function saveChangeCategory(task_id, newCategory) {
     });
 
     let result = await response.json();
-    console.log("Response", result);
-    return result;
 }
 export async function saveChangeUrgency(task_id, newUrgency) {
     let token = "Token " + localStorage.getItem("token");
@@ -247,8 +233,6 @@ export async function saveChangeUrgency(task_id, newUrgency) {
     });
 
     let result = await response.json();
-    console.log("Response", result);
-    return result;
 }
 
 export async function saveChangeUser(task_id, newUser) {
@@ -265,8 +249,6 @@ export async function saveChangeUser(task_id, newUser) {
         body: formData,
     });
     let result = await response.json();
-    console.log("Response", result);
-    return result;
 }
 
 export async function deleteTask(task_id) {

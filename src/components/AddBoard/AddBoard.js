@@ -15,7 +15,6 @@ export default function AddBoard(props) {
 
   const handleClose = () => {
     addBoard(name).then((result) => {
-      console.log("Added Board ", result);
       let [board] = result;
       props.addBoard(board);
       props.changeBoard(board);
@@ -25,7 +24,6 @@ export default function AddBoard(props) {
   };
 
   const handleCancel = () => {
-    console.log("In handle Cancel");
     setOpen(false);
     resetState();
   };
@@ -35,7 +33,6 @@ export default function AddBoard(props) {
 
   const handleChange = (e) => {
     setName(e.target.value);
-    console.log(name);
   };
   return (
     <Dialog open={open} onClose={handleCancel}>

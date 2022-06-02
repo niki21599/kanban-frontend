@@ -13,14 +13,21 @@ export default function NoBoards(props) {
   let openDialog = () => {
     setOpen(true);
   };
+
   setTimeout(() => {
     setLoading(false);
-  }, 1000);
+  }, 300);
 
   return (
     <div>
       {loading ? (
-        <Box sx={{ display: "flex" }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
           <CircularProgress />
         </Box>
       ) : (
@@ -34,7 +41,7 @@ export default function NoBoards(props) {
             }}
           >
             <Typography variant="h6" sx={{ mt: 2, ml: 2, mr: 2, mb: 2 }}>
-              You have no Boards added yet. Please add a board.
+              You have no boards added yet. Please add a board.
             </Typography>
 
             <Button

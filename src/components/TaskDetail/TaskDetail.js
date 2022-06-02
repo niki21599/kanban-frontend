@@ -1,20 +1,11 @@
 import React, { useEffect, useState } from "react";
 import "./TaskDetail.css";
-import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
-import { SpeedDialAction } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
 import Fab from "@mui/material/Fab";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -34,8 +25,6 @@ export default function TaskDetail(props) {
   const [openDeleteTask, setOpenDeleteTask] = useState(false);
   const [name, setName] = useState("");
 
-  console.log("the Description: ", task.fields.description);
-
   useEffect(() => {
     getUserById(task.fields.user);
   });
@@ -45,31 +34,23 @@ export default function TaskDetail(props) {
   };
 
   const deleteTaskOpen = () => {
-    // Delete Task with this id
     setOpenDeleteTask(true);
   };
   const handleUserOpen = () => {
     setOpenChangeUser(true);
   };
-  const handleUserClose = () => {
-    setOpenChangeUser(false);
-  };
+
   const handleCatOpen = () => {
     setOpenChangeCategory(true);
   };
-  const handleCatClose = () => {
-    setOpenChangeCategory(false);
-  };
+
   const handleUrgencyOpen = () => {
     setOpenChangeUrgency(true);
   };
-  const handleUrgencyClose = () => {
-    setOpenChangeUrgency(false);
-  };
+
   const getUserById = (pk) => {
     getUser(pk).then((result) => {
       let [user] = result;
-      console.log(user.fields.first_name);
       setName(user.fields.first_name + " " + user.fields.last_name);
     });
   };
@@ -100,6 +81,7 @@ export default function TaskDetail(props) {
           open={openDeleteTask}
           setOpen={setOpenDeleteTask}
           task={task}
+          setOpenDetail={props.setOpenDetail}
           deleteTask={props.deleteTask}
         ></DeleteTask>
         <Fab
