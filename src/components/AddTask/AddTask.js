@@ -11,6 +11,8 @@ import MenuItem from "@mui/material/MenuItem";
 import { FormControl } from "@mui/material";
 import { InputLabel } from "@mui/material";
 import { Select } from "@mui/material";
+import { addTask, getUsersFromBoard } from "../../api/apiCalls";
+import { useEffect } from "react";
 
 export default function AddTask(props) {
   const { open, setOpen } = props;
@@ -19,10 +21,45 @@ export default function AddTask(props) {
   const [urgency, setUrgency] = React.useState("");
   const [color, setColor] = React.useState("white");
   const [category, setCategory] = React.useState(props.category);
+  const [possibleUsers, setPossibleUsers] = React.useState([]);
+  const [description, setDescription] = React.useState("");
+
+  useEffect(() => {
+    getUsersFromBoard(props.board.pk).then((result) => {
+      setPossibleUsers(result);
+    });
+  }, [props.board]);
 
   const handleClose = () => {
-    setOpen(false);
+    addTask(
+      title,
+      urgency,
+      category,
+      user,
+      props.board.pk,
+      color,
+      description
+    ).then((result) => {
+      let [task] = result;
+      props.addTask(task);
+      setOpen(false);
+      resetState();
+    });
   };
+
+  const handleCancel = () => {
+    setOpen(false);
+    resetState();
+  };
+  const resetState = () => {
+    setUser("");
+    setTitle("");
+    setDescription("");
+    setColor("white");
+    setCategory(props.category);
+    setUrgency("");
+  };
+
   const handleUserChange = (e) => {
     setUser(e.target.value);
   };
@@ -38,14 +75,17 @@ export default function AddTask(props) {
   const handleColorChange = (e) => {
     setColor(e.target.value);
   };
+  const handleDescriptionChange = (e) => {
+    setDescription(e.target.value);
+  };
 
   return (
-    <Dialog open={open} onClose={handleClose}>
-      <DialogTitle>Add Task</DialogTitle>
+    <Dialog open={open} onClose={handleCancel}>
+      <DialogTitle> Add Task </DialogTitle>{" "}
       <DialogContent>
         <DialogContentText>
-          Type in your Task Data for your selected Board
-        </DialogContentText>
+          Type in your Task Data for your selected Board{" "}
+        </DialogContentText>{" "}
         <TextField
           autoFocus
           margin="dense"
@@ -58,9 +98,8 @@ export default function AddTask(props) {
           onChange={handleTitleChange}
           value={title}
         />
-
         <FormControl sx={{ mt: 2, minWidth: 250, width: "50%" }}>
-          <InputLabel htmlFor="select-category">Category</InputLabel>
+          <InputLabel htmlFor="select-category"> Category </InputLabel>{" "}
           <Select
             autoFocus
             required
@@ -72,14 +111,14 @@ export default function AddTask(props) {
               id: "select-category",
             }}
           >
-            <MenuItem value="To do">To do</MenuItem>
-            <MenuItem value="In progress">In progress</MenuItem>
-            <MenuItem value="Testing">Testing </MenuItem>
-            <MenuItem value="Done">Done</MenuItem>
-          </Select>
-        </FormControl>
+            <MenuItem value="To do"> To do </MenuItem>{" "}
+            <MenuItem value="In progress"> In progress </MenuItem>{" "}
+            <MenuItem value="Testing"> Testing </MenuItem>{" "}
+            <MenuItem value="Done"> Done </MenuItem>{" "}
+          </Select>{" "}
+        </FormControl>{" "}
         <FormControl sx={{ mt: 2, minWidth: 250, width: "50%" }}>
-          <InputLabel htmlFor="select-urgency">Urgency</InputLabel>
+          <InputLabel htmlFor="select-urgency"> Urgency </InputLabel>{" "}
           <Select
             autoFocus
             required
@@ -91,13 +130,13 @@ export default function AddTask(props) {
               id: "select-urgency",
             }}
           >
-            <MenuItem value="Nicht Dringend">Nicht Dringend</MenuItem>
-            <MenuItem value="Dringeng">Dringend</MenuItem>
-            <MenuItem value="Sehr Dringend">Sehr Dringend</MenuItem>
-          </Select>
-        </FormControl>
-        <FormControl sx={{ mt: 2, minWidth: 250, width: "50%" }}>
-          <InputLabel htmlFor="select-user">User</InputLabel>
+            <MenuItem value="Nicht Dringend"> Nicht Dringend </MenuItem>{" "}
+            <MenuItem value="Dringend"> Dringend </MenuItem>{" "}
+            <MenuItem value="Sehr Dringend"> Sehr Dringend </MenuItem>{" "}
+          </Select>{" "}
+        </FormControl>{" "}
+        <FormControl sx={{ mt: 2, mb: 2, minWidth: 250, width: "50%" }}>
+          <InputLabel htmlFor="select-user"> User </InputLabel>{" "}
           <Select
             autoFocus
             required
@@ -109,16 +148,16 @@ export default function AddTask(props) {
               id: "select-user",
             }}
           >
-            <MenuItem value={false}>Niklas</MenuItem>
-            <MenuItem value="xs">Bla</MenuItem>
-            <MenuItem value="sm">Bla </MenuItem>
-            <MenuItem value="md">Bla</MenuItem>
-            <MenuItem value="lg">Bla</MenuItem>
-            <MenuItem value="xl">Bla</MenuItem>
-          </Select>
-        </FormControl>
-        <FormControl sx={{ mt: 2, minWidth: 250, width: "50%" }}>
-          <InputLabel htmlFor="select-color">Color</InputLabel>
+            {possibleUsers.map((user) => (
+              <MenuItem key={user.pk} value={user.pk}>
+                {" "}
+                {user.fields.first_name + " " + user.fields.last_name}{" "}
+              </MenuItem>
+            ))}{" "}
+          </Select>{" "}
+        </FormControl>{" "}
+        <FormControl sx={{ mt: 2, mb: 2, minWidth: 250, width: "50%" }}>
+          <InputLabel htmlFor="select-color"> Color </InputLabel>{" "}
           <Select
             autoFocus
             required
@@ -130,19 +169,30 @@ export default function AddTask(props) {
               id: "select-color",
             }}
           >
-            <MenuItem value="red">red</MenuItem>
-            <MenuItem value="blue">blue</MenuItem>
-            <MenuItem value="green">green </MenuItem>
-            <MenuItem value="yellow">yellow</MenuItem>
-            <MenuItem value="orange">orange</MenuItem>
-            <MenuItem value="white">white</MenuItem>
-          </Select>
-        </FormControl>
-      </DialogContent>
+            <MenuItem value="red"> red </MenuItem>{" "}
+            <MenuItem value="blue"> blue </MenuItem>{" "}
+            <MenuItem value="green"> green </MenuItem>{" "}
+            <MenuItem value="yellow"> yellow </MenuItem>{" "}
+            <MenuItem value="orange"> orange </MenuItem>{" "}
+            <MenuItem value="white"> white </MenuItem>{" "}
+          </Select>{" "}
+        </FormControl>{" "}
+        <TextField
+          id="description"
+          label="Description"
+          placeholder="Type your Description here"
+          required
+          multiline
+          variant="standard"
+          fullWidth
+          value={description}
+          onChange={handleDescriptionChange}
+        />{" "}
+      </DialogContent>{" "}
       <DialogActions>
-        <Button onClick={handleClose}>Cancel</Button>
-        <Button onClick={handleClose}>Add</Button>
-      </DialogActions>
+        <Button onClick={handleCancel}> Cancel </Button>{" "}
+        <Button onClick={handleClose}> Add </Button>{" "}
+      </DialogActions>{" "}
     </Dialog>
   );
 }

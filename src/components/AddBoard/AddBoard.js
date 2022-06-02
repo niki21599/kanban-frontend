@@ -7,13 +7,29 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import { addBoard } from "../../api/apiCalls";
 
 export default function AddBoard(props) {
   const { open, setOpen } = props;
   const [name, setName] = React.useState("");
 
   const handleClose = () => {
+    addBoard(name).then((result) => {
+      console.log("Added Board ", result);
+      let [board] = result;
+      props.addBoard(board);
+      props.changeBoard(board);
+      setOpen(false);
+      resetState();
+    });
+  };
+
+  const handleCancel = () => {
     setOpen(false);
+    resetState();
+  };
+  const resetState = () => {
+    setName("");
   };
 
   const handleChange = (e) => {
@@ -21,7 +37,7 @@ export default function AddBoard(props) {
     console.log(name);
   };
   return (
-    <Dialog open={open} onClose={handleClose}>
+    <Dialog open={open} onClose={handleCancel}>
       <DialogTitle>Add Board</DialogTitle>
       <DialogContent>
         <DialogContentText>
@@ -42,7 +58,7 @@ export default function AddBoard(props) {
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose}>Cancel</Button>
+        <Button onClick={handleCancel}>Cancel</Button>
         <Button onClick={handleClose}>Add</Button>
       </DialogActions>
     </Dialog>

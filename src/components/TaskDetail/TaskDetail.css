@@ -1,0 +1,7 @@
+.MuiPaper-root {
+    overflow-y: unset !important;
+}
+
+.with-breaks {
+    white-space: pre-wrap;
+}

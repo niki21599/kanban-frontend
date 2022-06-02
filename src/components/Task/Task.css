@@ -2,4 +2,30 @@
     min-height: 50px;
     margin: 4px 4px 4px 4px;
     display: flex;
+    padding-left: 4px;
+    padding-right: 4px;
+}
+
+.white {
+    background-color: white !important;
+}
+
+.red {
+    background-color: rgba(255, 0, 0, 0.3) !important;
+}
+
+.blue {
+    background-color: rgba(0, 0, 255, 0.3) !important;
+}
+
+.green {
+    background-color: rgba(0, 255, 0, 0.3) !important;
+}
+
+.yellow {
+    background-color: rgba(255, 255, 0, 0.3) !important;
+}
+
+.orange {
+    background-color: rgba(255, 130, 0, 0.3) !important;
 }

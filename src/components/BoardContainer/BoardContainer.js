@@ -23,12 +23,13 @@ export default function BoardContainer(props) {
     <div className="boardContainer" id={props.title}>
       <div className="heading">
         <Typography align="left" variant="h5">
-          {props.title}
-        </Typography>
-        <IconButton className="white" onClick={handleAddTask}>
+          {" "}
+          {props.title}{" "}
+        </Typography>{" "}
+        <IconButton className="whiteButton" onClick={handleAddTask}>
           <AddIcon />
-        </IconButton>
-      </div>
+        </IconButton>{" "}
+      </div>{" "}
       <div
         className="task-Section"
         onDrop={() => moveTo(props.title)}
@@ -37,17 +38,19 @@ export default function BoardContainer(props) {
         {props.tasks.map((task) => (
           <Task
             task={task}
-            key={task.title}
+            key={task.pk}
             changeDraggedElement={props.changeDraggedElement}
             openDetail={props.openDetail}
           />
-        ))}
-      </div>
+        ))}{" "}
+      </div>{" "}
       <AddTask
         open={addTask}
         setOpen={setAddTask}
         category={props.title}
-      ></AddTask>
+        board={props.board}
+        addTask={props.addTask}
+      ></AddTask>{" "}
     </div>
   );
 }

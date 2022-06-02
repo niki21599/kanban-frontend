@@ -9,12 +9,12 @@ export default function Task(props) {
   };
   return (
     <Card
-      className="taskCard"
+      className={"taskCard " + props.task.fields.color}
       draggable="true"
-      onDragStart={() => startDragging(props.task.id)}
-      onClick={() => props.openDetail(props.task.id)}
+      onDragStart={() => startDragging(props.task.pk)}
+      onClick={() => props.openDetail(props.task.pk)}
     >
-      <Typography variant="h6"> {props.task.title} </Typography>{" "}
+      <Typography variant="h6"> {props.task.fields.title} </Typography>{" "}
     </Card>
   );
 }

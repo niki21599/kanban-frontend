@@ -13,13 +13,14 @@ import AddBoard from "../AddBoard/AddBoard";
 
 import AddTask from "../AddTask/AddTask";
 import AddUser from "../AddUser/AddUser";
+import { PropaneSharp } from "@mui/icons-material";
 
 const actions = [
   { icon: <AssignmentOutlinedIcon />, name: "New Task" },
   { icon: <DashboardOutlinedIcon />, name: "New Board" },
   { icon: <PersonOutlineIcon />, name: "Add User" },
 ];
-export default function AddButton() {
+export default function AddButton(props) {
   const [open, setOpen] = React.useState(false);
   const [newBoard, setNewBoard] = React.useState(false);
   const [addUser, setAddUser] = React.useState(false);
@@ -58,11 +59,31 @@ export default function AddButton() {
             tooltipOpen
             onClick={() => openDialog(action.name)}
           />
-        ))}
-      </SpeedDial>
-      <AddBoard open={newBoard} setOpen={setNewBoard}></AddBoard>
-      <AddTask open={addTask} setOpen={setAddTask} category="To do"></AddTask>
-      <AddUser open={addUser} setOpen={setAddUser}></AddUser>
+        ))}{" "}
+      </SpeedDial>{" "}
+      <AddBoard
+        open={newBoard}
+        setOpen={setNewBoard}
+        addBoard={props.addBoard}
+        changeBoard={props.changeBoard}
+      ></AddBoard>{" "}
+      <AddTask
+        open={addTask}
+        setOpen={setAddTask}
+        board={props.board}
+        addTask={props.addTask}
+        category="To do"
+      >
+        {" "}
+      </AddTask>{" "}
+      <AddUser
+        open={addUser}
+        setOpen={setAddUser}
+        board={props.board}
+        addUserToBoard={props.addUserToBoard}
+      >
+        {" "}
+      </AddUser>{" "}
     </div>
   );
 }
