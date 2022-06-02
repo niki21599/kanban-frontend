@@ -32,12 +32,18 @@ export default function Navbar(props) {
   };
 
   useEffect(() => {
-    console.log("USe Effect fucking called");
     if (props.loggedIn) {
       getBoards().then((result) => {
         props.setBoards(result);
         if (result.length > 0) {
-          props.handleChange(result[0]);
+          let board = localStorage.getItem("board");
+          if (board) {
+            props.handleChange(JSON.parse(board));
+          } else {
+            props.handleChange(result[0]);
+          }
+        } else {
+          props.handleChange({});
         }
       });
     }
@@ -109,6 +115,7 @@ export default function Navbar(props) {
             align="center"
             variant="h4"
             component="div"
+            className="heading-responsive"
             sx={{ flexGrow: 1, fontFamily: "cursive" }}
           >
             KanbanBoard

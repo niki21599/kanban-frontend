@@ -7,4 +7,18 @@
     display: flex;
     border-radius: 10px;
     margin-left: 16px;
+    display: grid;
+    grid-template-columns: minmax(175px, 25%) minmax(175px, 25%) minmax( 175px, 25%) minmax(175px, 25%);
+}
+
+@media (max-width: 775px) {
+    .board {
+        grid-template-columns: minmax(175px, 50%) minmax(175px, 50%);
+    }
+}
+
+@media (max-width: 380px) {
+    .board {
+        grid-template-columns: minmax(175px, 100%);
+    }
 }

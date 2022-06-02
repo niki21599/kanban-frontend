@@ -105,6 +105,7 @@ export default function TaskDetail(props) {
         <Fab
           variant="extended"
           onClick={handleUserOpen}
+          className="user-responsive"
           sx={{ position: "absolute", left: "105%", top: "0px" }}
         >
           <PersonOutlineIcon sx={{ mr: 1 }} />
@@ -113,6 +114,7 @@ export default function TaskDetail(props) {
         <Fab
           variant="extended"
           sx={{ position: "absolute", left: "105%", top: "60px" }}
+          className="urgency-responsive"
           onClick={handleUrgencyOpen}
         >
           <TimerIcon sx={{ mr: 1 }} />
@@ -120,6 +122,7 @@ export default function TaskDetail(props) {
         </Fab>
         <Fab
           variant="extended"
+          className="delete-responsive"
           sx={{ position: "absolute", left: "105%", top: "120px" }}
           onClick={deleteTaskOpen}
         >
@@ -127,8 +130,10 @@ export default function TaskDetail(props) {
           Delete Task
         </Fab>
         <Fab
+          className="move-responsive"
           variant="extended"
           sx={{ position: "absolute", left: "105%", top: "180px" }}
+          //sx={{ position: "absolute", top: "-60px", left: "185px" }}
           onClick={handleCatOpen}
         >
           <ArrowForwardIcon sx={{ mr: 1 }} />

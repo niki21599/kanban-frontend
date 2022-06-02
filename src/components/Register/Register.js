@@ -8,7 +8,7 @@ import { Button } from "@mui/material";
 import { Link } from "react-router-dom";
 import { register } from "../../api/apiCalls";
 import { Navigate } from "react-router-dom";
-
+import ImpressumFooter from "../ImpressumFooter/ImpressumFooter";
 class Register extends React.Component {
   state = {
     username: "",
@@ -72,6 +72,7 @@ class Register extends React.Component {
               width: 350,
               boxShadow: "2px -1px 5px rgba(0,0,0,0.2)",
               marginLeft: "calc(50vw - 176px)",
+              marginBottom: 4,
             }}
           >
             <Typography component="h1" variant="h5" sx={{ marginTop: 1 }}>
@@ -197,6 +198,7 @@ class Register extends React.Component {
             </Typography>
           </Box>
         )}
+        <ImpressumFooter position="register"></ImpressumFooter>
       </div>
     );
   }

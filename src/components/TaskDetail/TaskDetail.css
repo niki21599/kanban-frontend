@@ -5,3 +5,22 @@
 .with-breaks {
     white-space: pre-wrap;
 }
+
+@media screen and (max-width: 775px) {
+    .delete-responsive {
+        top: -60px !important;
+        left: 185px !important;
+    }
+    .urgency-responsive {
+        top: 105% !important;
+        left: -5px !important;
+    }
+    .move-responsive {
+        top: 105% !important;
+        left: 215px !important;
+    }
+    .user-responsive {
+        top: -60px !important;
+        left: 0px !important;
+    }
+}

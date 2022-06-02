@@ -25,6 +25,7 @@ export default function AddBoard(props) {
   };
 
   const handleCancel = () => {
+    console.log("In handle Cancel");
     setOpen(false);
     resetState();
   };

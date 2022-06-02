@@ -20,6 +20,7 @@ const actions = [
   { icon: <DashboardOutlinedIcon />, name: "New Board" },
   { icon: <PersonOutlineIcon />, name: "Add User" },
 ];
+
 export default function AddButton(props) {
   const [open, setOpen] = React.useState(false);
   const [newBoard, setNewBoard] = React.useState(false);
@@ -45,7 +46,7 @@ export default function AddButton(props) {
     <div>
       <SpeedDial
         ariaLabel="SpeedDial tooltip example"
-        sx={{ position: "absolute", bottom: 16, right: 16 }}
+        sx={{ position: "fixed", bottom: 16, right: 16 }}
         icon={<SpeedDialIcon />}
         onClose={handleClose}
         onOpen={handleOpen}
@@ -73,17 +74,13 @@ export default function AddButton(props) {
         board={props.board}
         addTask={props.addTask}
         category="To do"
-      >
-        {" "}
-      </AddTask>{" "}
+      ></AddTask>
       <AddUser
         open={addUser}
         setOpen={setAddUser}
         board={props.board}
         addUserToBoard={props.addUserToBoard}
-      >
-        {" "}
-      </AddUser>{" "}
+      ></AddUser>
     </div>
   );
 }

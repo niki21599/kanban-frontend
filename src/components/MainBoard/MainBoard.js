@@ -7,6 +7,7 @@ import TaskDetail from "../TaskDetail/TaskDetail";
 import { saveChangeCategory } from "../../api/apiCalls";
 
 import { Navigate } from "react-router-dom";
+import NoBoards from "../NoBoards/NoBoards";
 
 class MainBoard extends React.Component {
   categories = ["To do", "In progress", "Testing", "Done"];
@@ -67,57 +68,62 @@ class MainBoard extends React.Component {
   render() {
     return (
       <div>
-        {" "}
         {this.props.loggedIn ? (
           <div>
-            <AddButton
-              addBoard={this.props.addBoard}
-              board={this.props.board}
-              addTask={this.props.addTask}
-              addUserToBoard={this.props.addUserToBoard}
-              changeBoard={this.props.changeBoard}
-            />{" "}
             {this.props.boardsAdded ? (
-              <div className="mainContainer">
-                <div className="headlineContainer">
-                  <Typography align="center" variant="h4">
+              <div>
+                <AddButton
+                  addBoard={this.props.addBoard}
+                  board={this.props.board}
+                  addTask={this.props.addTask}
+                  addUserToBoard={this.props.addUserToBoard}
+                  changeBoard={this.props.changeBoard}
+                  boardsAdded={this.props.boardsAdded}
+                />{" "}
+                <div className="mainContainer">
+                  <div className="headlineContainer">
+                    <Typography align="center" variant="h4">
+                      {" "}
+                      {this.props
+                        ? this.props.board.fields.name
+                        : "Board Name"}{" "}
+                    </Typography>{" "}
+                  </div>{" "}
+                  <div className="board">
                     {" "}
-                    {this.props
-                      ? this.props.board.fields.name
-                      : "Board Name"}{" "}
-                  </Typography>{" "}
-                </div>{" "}
-                <div className="board">
-                  {" "}
-                  {this.categories.map((cat) => {
-                    return (
-                      <BoardContainer
-                        key={cat}
-                        title={cat}
-                        tasks={this.getTasks(cat)}
-                        changeDraggedElement={this.changeDraggedElement}
-                        changeCategory={this.changeCategory}
-                        openDetail={this.openTaskDetail}
-                        board={this.props.board}
-                        addTask={this.props.addTask}
-                      />
-                    );
-                  })}{" "}
-                </div>{" "}
+                    {this.categories.map((cat) => {
+                      return (
+                        <BoardContainer
+                          key={cat}
+                          title={cat}
+                          tasks={this.getTasks(cat)}
+                          changeDraggedElement={this.changeDraggedElement}
+                          changeCategory={this.changeCategory}
+                          openDetail={this.openTaskDetail}
+                          board={this.props.board}
+                          addTask={this.props.addTask}
+                        />
+                      );
+                    })}{" "}
+                  </div>{" "}
+                </div>
+                <TaskDetail
+                  open={this.state.openDetail}
+                  setOpen={this.setOpenDetail}
+                  task={this.state.pickedTask}
+                  handleChangeCatWithOne={this.props.handleChangeCatWithOne}
+                  changeUrgency={this.props.changeUrgency}
+                  changeUser={this.props.changeUser}
+                  board={this.props.board}
+                  deleteTask={this.props.deleteTask}
+                ></TaskDetail>
               </div>
             ) : (
-              <div>You have no boards yet. Please add a board.</div>
-            )}
-            <TaskDetail
-              open={this.state.openDetail}
-              setOpen={this.setOpenDetail}
-              task={this.state.pickedTask}
-              handleChangeCatWithOne={this.props.handleChangeCatWithOne}
-              changeUrgency={this.props.changeUrgency}
-              changeUser={this.props.changeUser}
-              board={this.props.board}
-              deleteTask={this.props.deleteTask}
-            ></TaskDetail>{" "}
+              <NoBoards
+                changeBoard={this.props.changeBoard}
+                addBoard={this.props.addBoard}
+              />
+            )}{" "}
           </div>
         ) : (
           <Navigate to="/login" />

@@ -7,6 +7,7 @@ import { Button } from "@mui/material";
 import { Link } from "react-router-dom";
 import { login } from "../../api/apiCalls";
 import { Navigate } from "react-router-dom";
+import ImpressumFooter from "../ImpressumFooter/ImpressumFooter";
 
 class Login extends React.Component {
   state = {
@@ -115,6 +116,7 @@ class Login extends React.Component {
         ) : (
           <Navigate to="/" />
         )}
+        <ImpressumFooter position="" />
       </div>
     );
   }

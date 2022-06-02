@@ -228,8 +228,9 @@ export async function saveChangeCategory(task_id, newCategory) {
         body: formData,
     });
 
-    let result = await JSON.stringify(response);
-    console.log(result);
+    let result = await response.json();
+    console.log("Response", result);
+    return result;
 }
 export async function saveChangeUrgency(task_id, newUrgency) {
     let token = "Token " + localStorage.getItem("token");
@@ -245,8 +246,9 @@ export async function saveChangeUrgency(task_id, newUrgency) {
         body: formData,
     });
 
-    let result = await JSON.stringify(response);
-    console.log(result);
+    let result = await response.json();
+    console.log("Response", result);
+    return result;
 }
 
 export async function saveChangeUser(task_id, newUser) {
@@ -262,8 +264,9 @@ export async function saveChangeUser(task_id, newUser) {
         },
         body: formData,
     });
-    let result = await JSON.stringify(response);
-    console.log(result);
+    let result = await response.json();
+    console.log("Response", result);
+    return result;
 }
 
 export async function deleteTask(task_id) {

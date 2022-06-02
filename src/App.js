@@ -17,19 +17,23 @@ import {
   useRouteMatch,
   useParams,
 } from "react-router-dom";
+import Impressum from "./components/Impressum/Impressum";
+import Datenschutz from "./components/Datenschutz/Datenschutz";
 
 function App() {
-  let sample = {
-    pk: 2,
-    fields: {
-      name: "Main Board",
-    },
-  };
   let categories = ["To do", "In progress", "Testing", "Done"];
+  let sample = {};
 
   let isAutheticated = false;
 
-  let [board, setBoard] = React.useState(sample);
+  let [board, setBoard] = React.useState(() => {
+    const board = localStorage.getItem("board");
+    if (board) {
+      return JSON.parse(board);
+    } else {
+      return {};
+    }
+  });
   let [boards, setBoards] = React.useState([]);
   let [tasks, setTasks] = React.useState([]);
   let [loggedIn, setLoggedIn] = React.useState(() => {
@@ -58,14 +62,17 @@ function App() {
     setLoggedIn(false);
     localStorage.clear();
     console.log("delete Token");
-    setBoardsAdded(false);
+    setBoardsAdded(true);
   };
 
   let handleChange = (board) => {
     setBoard(board);
-    if (board !== sample) {
+    if (board !== {}) {
       setBoardsAdded(true);
     }
+
+    localStorage.setItem("board", JSON.stringify(board));
+    console.log(localStorage);
 
     getTasks(board.pk).then((result) => {
       setTasks(result);
@@ -173,6 +180,8 @@ function App() {
               />
             }
           ></Route>
+          <Route path="/impressum" element={<Impressum />}></Route>
+          <Route path="/datenschutz" element={<Datenschutz />}></Route>
         </Routes>
       </div>
     </React.Fragment>

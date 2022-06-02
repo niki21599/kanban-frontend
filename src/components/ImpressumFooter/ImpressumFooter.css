@@ -1,0 +1,49 @@
+.footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    min-height: 100px;
+    background-color: #1976d2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.register {
+    bottom: auto;
+}
+
+.color-white {
+    color: white;
+}
+
+.color-white a {
+    text-decoration: none;
+    color: white;
+}
+
+.passion {
+    font-family: cursive;
+}
+
+.impressum-container {
+    display: flex;
+}
+
+.mr8 {
+    margin-right: 8px;
+}
+
+@media screen and (max-width: 670px) {
+    .impressum-container {
+        flex-direction: column;
+        align-items: center;
+    }
+    .mt {
+        margin-top: 4px;
+    }
+    .mb {
+        margin-bottom: 4px;
+    }
+}

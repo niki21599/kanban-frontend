@@ -1,0 +1,7 @@
+.heading-responsive {}
+
+@media screen and (max-width: 480px) {
+    .heading-responsive {
+        font-size: 25px !important;
+    }
+}
