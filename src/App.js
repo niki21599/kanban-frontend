@@ -122,7 +122,6 @@ function App() {
           setBoards={setBoards}
           loggedIn={loggedIn}
           logout={handleLogout}
-          login={handleLogin}
           setBoard={setBoard}
         />
         <Routes>
