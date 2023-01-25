@@ -8,53 +8,66 @@ import { Link } from "react-router-dom";
 import { login, register, addGuestBoards } from "../../api/apiCalls";
 import { Navigate } from "react-router-dom";
 import ImpressumFooter from "../ImpressumFooter/ImpressumFooter";
+import { useSelector, useDispatch } from "react-redux";
+import { useState } from "react";
+import { setPassword, setUsername, setWrongData } from "../../store";
 
-class Login extends React.Component {
-  state = {
-    username: "",
-    password: "",
-    wrongData: false,
-  };
+function Login(props) {
+  let { username, password, wrongData } = useSelector(
+    (state) => state.loginForm
+  );
 
-  handleChange = (e) => {
-    this.setState({ wrongData: false });
-    this.setState({
-      [e.currentTarget.id]: e.currentTarget.value,
-    });
+  let dispatch = useDispatch();
+
+  let handleChange = (e) => {
+    dispatch(setWrongData(false));
+
+    if (e.currentTarget.id == "username") {
+      dispatch(setUsername(e.currentTarget.value));
+    }
+
+    if (e.currentTarget.id == "password") {
+      dispatch(setPassword(e.currentTarget.value));
+    }
   };
-  handleSubmit = (e) => {
+  let handleSubmit = (e) => {
     e.preventDefault();
-    login(this.state.username, this.state.password).then((result) => {
+
+    login(username, password).then((result) => {
       if (result.token) {
-        this.props.login(result.token);
+        props.login(result.token);
       } else {
-        this.setState({ username: "", password: "", wrongData: true });
+        dispatch(setUsername(""));
+        dispatch(setPassword(""));
+        dispatch(setWrongData(true));
       }
     });
   };
-  guestLogin = () => {
-    let number = this.getRandomNumber();
+
+  let guestLogin = () => {
+    let number = getRandomNumber();
     let username = "Mustermann" + number.toString();
-    let firstName = this.getFirstname();
-    let lastName = this.getLastname();
+    let firstName = getFirstname();
+    let lastName = getLastname();
     register(username, "123456", "123456", "x@gmail.com", firstName, lastName)
       .then((result) => {
         if (result.token) {
-          this.props.login(result.token);
+          props.login(result.token);
         }
       })
       .then(() => {
+        console.log("Add Guest Boards");
         addGuestBoards();
       });
   };
 
-  getRandomNumber = () => {
+  let getRandomNumber = () => {
     let min = 1;
     let max = 1000000;
     return Math.round(Math.random() * (max - min)) + min;
   };
 
-  getFirstname = () => {
+  let getFirstname = () => {
     let random = Math.round(Math.random() * (7 - 0)) + 0;
     let names = [
       "Luca",
@@ -70,7 +83,7 @@ class Login extends React.Component {
     return names[random];
   };
 
-  getLastname = () => {
+  let getLastname = () => {
     let random = Math.round(Math.random() * (7 - 0)) + 0;
     let names = [
       "Groß",
@@ -86,91 +99,90 @@ class Login extends React.Component {
     return names[random];
   };
 
-  render() {
-    return (
-      <div>
-        {!this.props.loggedIn ? (
+  return (
+    <div>
+      {!props.loggedIn ? (
+        <Box
+          sx={{
+            marginTop: 4,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            border: "1px solid lightgray",
+            width: 350,
+            boxShadow: "2px -1px 5px rgba(0,0,0,0.2)",
+            marginLeft: "calc(50vw - 176px)",
+          }}
+        >
+          <Typography component="h1" variant="h5" sx={{ marginTop: 1 }}>
+            Sign in
+          </Typography>{" "}
           <Box
-            sx={{
-              marginTop: 4,
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              border: "1px solid lightgray",
-              width: 350,
-              boxShadow: "2px -1px 5px rgba(0,0,0,0.2)",
-              marginLeft: "calc(50vw - 176px)",
-            }}
+            component="form"
+            onSubmit={(e) => handleSubmit(e)}
+            noValidate
+            sx={{ mt: 1, marginLeft: 2, marginRight: 2 }}
           >
-            <Typography component="h1" variant="h5" sx={{ marginTop: 1 }}>
-              Sign in
-            </Typography>{" "}
-            <Box
-              component="form"
-              onSubmit={(e) => this.handleSubmit(e)}
-              noValidate
-              sx={{ mt: 1, marginLeft: 2, marginRight: 2 }}
-            >
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                id="username"
-                label="Username"
-                name="username"
-                autoComplete="username"
-                autoFocus
-                value={this.state.username}
-                onChange={(e) => this.handleChange(e)}
-              />{" "}
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                role="textbox"
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-                value={this.state.password}
-                onChange={(e) => this.handleChange(e)}
-              />{" "}
-              {this.state.wrongData ? (
-                <Typography
-                  variant="string"
-                  align="center"
-                  sx={{ marginTop: 1, color: "red" }}
-                >
-                  Username or Password wrong{" "}
-                </Typography>
-              ) : (
-                ""
-              )}
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                sx={{ mt: 3, mb: 2 }}
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="username"
+              label="Username"
+              name="username"
+              autoComplete="username"
+              autoFocus
+              value={username}
+              onChange={(e) => handleChange(e)}
+            />{" "}
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              role="textbox"
+              name="password"
+              label="Password"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+              value={password}
+              onChange={(e) => handleChange(e)}
+            />{" "}
+            {wrongData ? (
+              <Typography
+                variant="string"
+                align="center"
+                sx={{ marginTop: 1, color: "red" }}
               >
-                Sign In{" "}
-              </Button>{" "}
-            </Box>{" "}
-            <Typography variant="string" sx={{ marginTop: 1, marginBottom: 1 }}>
-              Click{" "}
-              <Link className="link" to="/register">
-                {"here "}
-              </Link>
-              to create a new Account.{" "}
-            </Typography>{" "}
-            <Button onClick={() => this.guestLogin()}>Continue as Guest</Button>
-          </Box>
-        ) : (
-          <Navigate to="/" />
-        )}
-        <ImpressumFooter position="" />
-      </div>
-    );
-  }
+                Username or Password wrong{" "}
+              </Typography>
+            ) : (
+              ""
+            )}
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+            >
+              Sign In{" "}
+            </Button>{" "}
+          </Box>{" "}
+          <Typography variant="string" sx={{ marginTop: 1, marginBottom: 1 }}>
+            Click{" "}
+            <Link className="link" to="/register">
+              {"here "}
+            </Link>
+            to create a new Account.{" "}
+          </Typography>{" "}
+          <Button onClick={() => guestLogin()}>Continue as Guest</Button>
+        </Box>
+      ) : (
+        <Navigate to="/" />
+      )}
+      <ImpressumFooter position="" />
+    </div>
+  );
 }
+
 export default Login;

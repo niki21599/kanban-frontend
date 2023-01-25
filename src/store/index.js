@@ -1,6 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
 import loginFormReducer from "./slices/loginFormSlice";
-import { changePassword, changeUsername } from "./slices/loginFormSlice";
+import {
+  setPassword,
+  setUsername,
+  setWrongData,
+} from "./slices/loginFormSlice";
 
 let store = configureStore({
   reducer: {
@@ -8,4 +12,4 @@ let store = configureStore({
   },
 });
 
-export { store, changeUsername, changePassword };
+export { store, setUsername, setPassword, setWrongData };

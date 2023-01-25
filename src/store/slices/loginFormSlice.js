@@ -1,18 +1,21 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 let loginFormSlice = createSlice({
-  initialState: { username: "", password: "" },
+  initialState: { username: "", password: "", wrongData: false },
   name: "loginForm",
   reducers: {
-    changeUsername(state, action) {
+    setUsername(state, action) {
       state.username = action.payload;
     },
-    changePassword(state, action) {
+    setPassword(state, action) {
       state.password = action.payload;
+    },
+    setWrongData(state, action) {
+      state.wrongData = action.payload;
     },
   },
 });
 
 export default loginFormSlice.reducer;
 
-export let { changeUsername, changePassword } = loginFormSlice.actions;
+export let { setUsername, setPassword, setWrongData } = loginFormSlice.actions;
