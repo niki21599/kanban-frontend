@@ -9,8 +9,11 @@ import { login, register, addGuestBoards } from "../../api/apiCalls";
 import { Navigate } from "react-router-dom";
 import ImpressumFooter from "../ImpressumFooter/ImpressumFooter";
 import { useSelector, useDispatch } from "react-redux";
-import { useState } from "react";
-import { setPassword, setUsername, setWrongData } from "../../store";
+import {
+  setPasswordLoginForm,
+  setUsernameLoginForm,
+  setWrongDataLoginForm,
+} from "../../store";
 
 function Login(props) {
   let { username, password, wrongData } = useSelector(
@@ -20,14 +23,14 @@ function Login(props) {
   let dispatch = useDispatch();
 
   let handleChange = (e) => {
-    dispatch(setWrongData(false));
+    dispatch(setWrongDataLoginForm(false));
 
     if (e.currentTarget.id == "username") {
-      dispatch(setUsername(e.currentTarget.value));
+      dispatch(setUsernameLoginForm(e.currentTarget.value));
     }
 
     if (e.currentTarget.id == "password") {
-      dispatch(setPassword(e.currentTarget.value));
+      dispatch(setPasswordLoginForm(e.currentTarget.value));
     }
   };
   let handleSubmit = (e) => {
@@ -37,9 +40,9 @@ function Login(props) {
       if (result.token) {
         props.login(result.token);
       } else {
-        dispatch(setUsername(""));
-        dispatch(setPassword(""));
-        dispatch(setWrongData(true));
+        dispatch(setUsernameLoginForm(""));
+        dispatch(setPasswordLoginForm(""));
+        dispatch(setWrongDataLoginForm(true));
       }
     });
   };

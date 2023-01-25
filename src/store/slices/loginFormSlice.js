@@ -4,13 +4,13 @@ let loginFormSlice = createSlice({
   initialState: { username: "", password: "", wrongData: false },
   name: "loginForm",
   reducers: {
-    setUsername(state, action) {
+    setUsernameLoginForm(state, action) {
       state.username = action.payload;
     },
-    setPassword(state, action) {
+    setPasswordLoginForm(state, action) {
       state.password = action.payload;
     },
-    setWrongData(state, action) {
+    setWrongDataLoginForm(state, action) {
       state.wrongData = action.payload;
     },
   },
@@ -18,4 +18,8 @@ let loginFormSlice = createSlice({
 
 export default loginFormSlice.reducer;
 
-export let { setUsername, setPassword, setWrongData } = loginFormSlice.actions;
+export let {
+  setUsernameLoginForm,
+  setPasswordLoginForm,
+  setWrongDataLoginForm,
+} = loginFormSlice.actions;
