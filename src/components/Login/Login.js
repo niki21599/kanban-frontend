@@ -5,7 +5,7 @@ import { Typography } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import { Button } from "@mui/material";
 import { Link } from "react-router-dom";
-import { login } from "../../api/apiCalls";
+import { login, register, addGuestBoards } from "../../api/apiCalls";
 import { Navigate } from "react-router-dom";
 import ImpressumFooter from "../ImpressumFooter/ImpressumFooter";
 
@@ -31,6 +31,59 @@ class Login extends React.Component {
         this.setState({ username: "", password: "", wrongData: true });
       }
     });
+  };
+  guestLogin = () => {
+    let number = this.getRandomNumber();
+    let username = "Mustermann" + number.toString();
+    let firstName = this.getFirstname();
+    let lastName = this.getLastname();
+    register(username, "123456", "123456", "x@gmail.com", firstName, lastName)
+      .then((result) => {
+        if (result.token) {
+          this.props.login(result.token);
+        }
+      })
+      .then(() => {
+        addGuestBoards();
+      });
+  };
+
+  getRandomNumber = () => {
+    let min = 1;
+    let max = 1000000;
+    return Math.round(Math.random() * (max - min)) + min;
+  };
+
+  getFirstname = () => {
+    let random = Math.round(Math.random() * (7 - 0)) + 0;
+    let names = [
+      "Luca",
+      "Philipp",
+      "Niklas",
+      "Julian",
+      "Tim",
+      "Justus",
+      "Nico",
+      "Matthias",
+      "Fabian",
+    ];
+    return names[random];
+  };
+
+  getLastname = () => {
+    let random = Math.round(Math.random() * (7 - 0)) + 0;
+    let names = [
+      "Groß",
+      "Wallrich",
+      "Burg",
+      "Thielen",
+      "Klein",
+      "Loch",
+      "Jakob",
+      "Schmitt",
+      "Dany",
+    ];
+    return names[random];
   };
 
   render() {
@@ -109,6 +162,7 @@ class Login extends React.Component {
               </Link>
               to create a new Account.{" "}
             </Typography>{" "}
+            <Button onClick={() => this.guestLogin()}>Continue as Guest</Button>
           </Box>
         ) : (
           <Navigate to="/" />
