@@ -127,6 +127,7 @@ class Login extends React.Component {
                 margin="normal"
                 required
                 fullWidth
+                role="textbox"
                 name="password"
                 label="Password"
                 type="password"
