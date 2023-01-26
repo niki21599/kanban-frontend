@@ -40,6 +40,10 @@ export default function AddTask(props) {
     });
   }, [props.board]);
 
+  useEffect(() => {
+    dispatch(setCategoryAddTaskForm(props.category));
+  }, [open]);
+
   const handleClose = () => {
     addTask(
       title,
