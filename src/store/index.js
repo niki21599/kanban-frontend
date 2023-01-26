@@ -1,15 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
-import loginFormReducer from "./slices/loginFormSlice";
-import registerFormReducer from "./slices/registerFormSlice";
-import addBoardFormReducer from "./slices/addBoardFormSlice";
-
-import {
+import loginFormReducer, {
   setPasswordLoginForm,
   setUsernameLoginForm,
   setWrongDataLoginForm,
 } from "./slices/loginFormSlice";
-
-import {
+import registerFormReducer, {
   setEmailRegisterForm,
   setFirstNameRegisterForm,
   setLastNameRegisterForm,
@@ -19,14 +14,25 @@ import {
   setUsernameErrorRegisterForm,
   setUsernameRegisterForm,
 } from "./slices/registerFormSlice";
-
-import { setNameAddBoardForm } from "./slices/addBoardFormSlice";
+import addBoardFormReducer, {
+  setNameAddBoardForm,
+} from "./slices/addBoardFormSlice";
+import addTaskFormReducer, {
+  setCategoryAddTaskForm,
+  setColorAddTaskForm,
+  setDescriptionAddTaskForm,
+  setTitleAddTaskForm,
+  setUrgencyAddTaskForm,
+  setUserAddTaskForm,
+  resetAddTaskForm,
+} from "./slices/addTaskFormSlice";
 
 let store = configureStore({
   reducer: {
     loginForm: loginFormReducer,
     registerForm: registerFormReducer,
     addBoardForm: addBoardFormReducer,
+    addTaskForm: addTaskFormReducer,
   },
 });
 
@@ -44,4 +50,11 @@ export {
   setUsernameErrorRegisterForm,
   setUsernameRegisterForm,
   setNameAddBoardForm,
+  setCategoryAddTaskForm,
+  setColorAddTaskForm,
+  setDescriptionAddTaskForm,
+  setTitleAddTaskForm,
+  setUrgencyAddTaskForm,
+  setUserAddTaskForm,
+  resetAddTaskForm,
 };

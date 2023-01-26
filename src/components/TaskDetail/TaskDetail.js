@@ -23,7 +23,7 @@ export default function TaskDetail(props) {
   const [openChangeUrgency, setOpenChangeUrgency] = useState(false);
   const [openChangeCategory, setOpenChangeCategory] = useState(false);
   const [openDeleteTask, setOpenDeleteTask] = useState(false);
-  const [name, setName] = useState("");
+  const [name, setName] = useState(""); // ok
 
   useEffect(() => {
     getUserById(task.fields.user);

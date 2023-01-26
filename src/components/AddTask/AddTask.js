@@ -13,22 +13,36 @@ import { InputLabel } from "@mui/material";
 import { Select } from "@mui/material";
 import { addTask, getUsersFromBoard } from "../../api/apiCalls";
 import { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  setCategoryAddTaskForm,
+  setColorAddTaskForm,
+  setDescriptionAddTaskForm,
+  setUserAddTaskForm,
+  setTitleAddTaskForm,
+  setUrgencyAddTaskForm,
+  resetAddTaskForm,
+} from "../../store";
 
 export default function AddTask(props) {
   const { open, setOpen } = props;
-  const [user, setUser] = React.useState("");
-  const [title, setTitle] = React.useState("");
-  const [urgency, setUrgency] = React.useState("");
-  const [color, setColor] = React.useState("white");
-  const [category, setCategory] = React.useState(props.category);
+
   const [possibleUsers, setPossibleUsers] = React.useState([]);
-  const [description, setDescription] = React.useState("");
+
+  let { user, title, urgency, color, category, description } = useSelector(
+    (state) => state.addTaskForm
+  );
+  let dispatch = useDispatch();
 
   useEffect(() => {
     getUsersFromBoard(props.board.pk).then((result) => {
       setPossibleUsers(result);
     });
   }, [props.board]);
+
+  // useEffect(() => {
+  //   dispatch(setCategoryAddTaskForm(props.category));
+  // }, []);
 
   const handleClose = () => {
     addTask(
@@ -43,40 +57,32 @@ export default function AddTask(props) {
       let [task] = result;
       props.addTask(task);
       setOpen(false);
-      resetState();
+      dispatch(resetAddTaskForm());
     });
   };
 
   const handleCancel = () => {
     setOpen(false);
-    resetState();
-  };
-  const resetState = () => {
-    setUser("");
-    setTitle("");
-    setDescription("");
-    setColor("white");
-    setCategory(props.category);
-    setUrgency("");
+    dispatch(resetAddTaskForm());
   };
 
   const handleUserChange = (e) => {
-    setUser(e.target.value);
+    dispatch(setUserAddTaskForm(e.target.value));
   };
   const handleTitleChange = (e) => {
-    setTitle(e.target.value);
+    dispatch(setTitleAddTaskForm(e.target.value));
   };
   const handleCategoryChange = (e) => {
-    setCategory(e.target.value);
+    dispatch(setCategoryAddTaskForm(e.target.value));
   };
   const handleUrgencyChange = (e) => {
-    setUrgency(e.target.value);
+    dispatch(setUrgencyAddTaskForm(e.target.value));
   };
   const handleColorChange = (e) => {
-    setColor(e.target.value);
+    dispatch(setColorAddTaskForm(e.target.value));
   };
   const handleDescriptionChange = (e) => {
-    setDescription(e.target.value);
+    dispatch(setDescriptionAddTaskForm(e.target.value));
   };
 
   return (
