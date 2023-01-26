@@ -10,10 +10,20 @@ import { FormControl } from "@mui/material";
 import { InputLabel } from "@mui/material";
 import { Select } from "@mui/material";
 import { saveChangeCategory } from "../../api/apiCalls";
+import { useSelector, useDispatch } from "react-redux";
+import { setCategoryChangeCategoryForm } from "../../store";
+import { useEffect } from "react";
 
 export default function ChangeCategory(props) {
   const { open, setOpen, task, handleChangeCatWithOne } = props;
-  const [category, setCategory] = React.useState(task.fields.category);
+  //const [category, setCategory] = React.useState(task.fields.category);
+
+  const { category } = useSelector((state) => state.changeCategoryForm);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(setCategoryChangeCategoryForm(task.fields.category));
+  }, []);
 
   const handleClose = () => {
     handleChangeCatWithOne(task.pk, category);
@@ -24,7 +34,7 @@ export default function ChangeCategory(props) {
   };
 
   const handleCategoryChange = (e) => {
-    setCategory(e.target.value);
+    dispatch(setCategoryChangeCategoryForm(e.target.value));
   };
 
   const handleCancel = () => {
@@ -32,7 +42,7 @@ export default function ChangeCategory(props) {
     resetState();
   };
   const resetState = () => {
-    setCategory(task.fields.category);
+    dispatch(setCategoryChangeCategoryForm(task.fields.category));
   };
 
   return (

@@ -26,6 +26,9 @@ import addTaskFormReducer, {
   setUserAddTaskForm,
   resetAddTaskForm,
 } from "./slices/addTaskFormSlice";
+import changeCategoryFormReducer, {
+  setCategoryChangeCategoryForm,
+} from "./slices/changeCategoryFormSlice";
 
 let store = configureStore({
   reducer: {
@@ -33,6 +36,7 @@ let store = configureStore({
     registerForm: registerFormReducer,
     addBoardForm: addBoardFormReducer,
     addTaskForm: addTaskFormReducer,
+    changeCategoryForm: changeCategoryFormReducer,
   },
 });
 
@@ -57,4 +61,5 @@ export {
   setUrgencyAddTaskForm,
   setUserAddTaskForm,
   resetAddTaskForm,
+  setCategoryChangeCategoryForm,
 };
