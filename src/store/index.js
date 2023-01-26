@@ -30,6 +30,10 @@ import changeCategoryFormReducer, {
   setCategoryChangeCategoryForm,
 } from "./slices/changeCategoryFormSlice";
 
+import changeUrgencyFormReducer, {
+  setUrgencyChangeUrgencyForm,
+} from "./slices/changeUrgencyFormSlice";
+
 let store = configureStore({
   reducer: {
     loginForm: loginFormReducer,
@@ -37,6 +41,7 @@ let store = configureStore({
     addBoardForm: addBoardFormReducer,
     addTaskForm: addTaskFormReducer,
     changeCategoryForm: changeCategoryFormReducer,
+    changeUrgencyForm: changeUrgencyFormReducer,
   },
 });
 
@@ -62,4 +67,5 @@ export {
   setUserAddTaskForm,
   resetAddTaskForm,
   setCategoryChangeCategoryForm,
+  setUrgencyChangeUrgencyForm,
 };

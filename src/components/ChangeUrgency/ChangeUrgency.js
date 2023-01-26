@@ -10,10 +10,19 @@ import { FormControl } from "@mui/material";
 import { InputLabel } from "@mui/material";
 import { Select } from "@mui/material";
 import { saveChangeUrgency } from "../../api/apiCalls";
+import { useSelector, useDispatch } from "react-redux";
+import { setUrgencyChangeUrgencyForm } from "../../store";
+import { useEffect } from "react";
 
 export default function ChangeUrgency(props) {
   const { open, setOpen, task, changeUrgency } = props;
-  const [urgency, setUrgency] = React.useState(task.fields.urgency);
+
+  const { urgency } = useSelector((state) => state.changeUrgencyForm);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(setUrgencyChangeUrgencyForm(task.fields.urgency));
+  }, []);
 
   const handleClose = () => {
     changeUrgency(task.pk, urgency);
@@ -23,14 +32,14 @@ export default function ChangeUrgency(props) {
     });
   };
   const handleUrgencyChange = (e) => {
-    setUrgency(e.target.value);
+    dispatch(setUrgencyChangeUrgencyForm(e.target.value));
   };
   const handleCancel = () => {
     setOpen(false);
     resetState();
   };
   const resetState = () => {
-    setUrgency(task.fields.urgency);
+    dispatch(setUrgencyChangeUrgencyForm(task.fields.urgency));
   };
 
   return (
