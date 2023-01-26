@@ -11,21 +11,22 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import { addUserToBoard, getUsersNotAddedToBoard } from "../../api/apiCalls";
 import { useSelector, useDispatch } from "react-redux";
-import { setOpenAddUserDialog } from "../../store";
+import { setOpenAddUserDialog, setCheckedAddUserForm } from "../../store";
 
 export default function AddUser(props) {
   const { board } = props;
   const [possibleUsers, setPossibleUsers] = React.useState([]);
-  const [checked, setChecked] = React.useState([]);
 
   const { open } = useSelector((state) => state.addUserDialog);
+  const { checked } = useSelector((state) => state.addUserForm);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
     getUsersNotAddedToBoard(board.pk).then((result) => {
       setPossibleUsers(result);
       let newChecked = new Array(possibleUsers.length).fill(false);
-      setChecked(newChecked);
+      dispatch(setCheckedAddUserForm(newChecked));
     });
   }, [board]);
 
@@ -49,14 +50,14 @@ export default function AddUser(props) {
     resetState();
   };
   const resetState = () => {
-    setChecked([]);
+    dispatch(setCheckedAddUserForm([]));
   };
   const handleChange = (event, index) => {
     let items = [...checked];
     let item = { ...items[index] };
     item = event.target.checked;
     items[index] = item;
-    setChecked(items);
+    dispatch(setCheckedAddUserForm(items));
   };
 
   return (
