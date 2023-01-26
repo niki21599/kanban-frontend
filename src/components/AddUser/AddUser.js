@@ -10,11 +10,16 @@ import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import { addUserToBoard, getUsersNotAddedToBoard } from "../../api/apiCalls";
+import { useSelector, useDispatch } from "react-redux";
+import { setOpenAddUserDialog } from "../../store";
 
 export default function AddUser(props) {
-  const { open, setOpen, board } = props;
+  const { board } = props;
   const [possibleUsers, setPossibleUsers] = React.useState([]);
   const [checked, setChecked] = React.useState([]);
+
+  const { open } = useSelector((state) => state.addUserDialog);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     getUsersNotAddedToBoard(board.pk).then((result) => {
@@ -35,12 +40,12 @@ export default function AddUser(props) {
 
     addUserToBoard(board.pk, user_ids);
     props.addUserToBoard(user_ids);
-    setOpen(false);
+    dispatch(setOpenAddUserDialog(false));
     resetState();
   };
 
   const handleCancel = () => {
-    setOpen(false);
+    dispatch(setOpenAddUserDialog(false));
     resetState();
   };
   const resetState = () => {
