@@ -69,6 +69,9 @@ import changeUrgencyDialogReducer, {
 import changeUserDialogReducer, {
   setOpenChangeUserDialog,
 } from "./slices/changeUserDialogSlice";
+import deleteTaskDialogReducer, {
+  setOpenDeleteTaskDialog,
+} from "./slices/deleteTaskDialogSlice";
 
 let store = configureStore({
   reducer: {
@@ -87,6 +90,7 @@ let store = configureStore({
     changeCategoryDialog: changeCategoryDialogReducer,
     changeUrgencyDialog: changeUrgencyDialogReducer,
     changeUserDialog: changeUserDialogReducer,
+    deleteTaskDialog: deleteTaskDialogReducer,
   },
 });
 
@@ -122,4 +126,5 @@ export {
   setOpenChangeCategoryDialog,
   setOpenChangeUrgencyDialog,
   setOpenChangeUserDialog,
+  setOpenDeleteTaskDialog,
 };

@@ -21,12 +21,11 @@ import {
   setOpenChangeCategoryDialog,
   setOpenChangeUrgencyDialog,
   setOpenChangeUserDialog,
+  setOpenDeleteTaskDialog,
 } from "../../store";
 
 export default function TaskDetail(props) {
   const { open, setOpen, task } = props;
-
-  const [openDeleteTask, setOpenDeleteTask] = useState(false);
   const [name, setName] = useState(""); // ok
 
   let dispatch = useDispatch();
@@ -40,7 +39,7 @@ export default function TaskDetail(props) {
   };
 
   const deleteTaskOpen = () => {
-    setOpenDeleteTask(true);
+    dispatch(setOpenDeleteTaskDialog(true));
   };
   const handleUserOpen = () => {
     dispatch(setOpenChangeUserDialog(true));
@@ -78,8 +77,6 @@ export default function TaskDetail(props) {
           changeUrgency={props.changeUrgency}
         ></ChangeUrgency>
         <DeleteTask
-          open={openDeleteTask}
-          setOpen={setOpenDeleteTask}
           task={task}
           setOpenDetail={props.setOpenDetail}
           deleteTask={props.deleteTask}
