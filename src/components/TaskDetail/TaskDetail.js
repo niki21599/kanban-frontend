@@ -16,18 +16,20 @@ import ChangeCategory from "../ChangeCategory/ChangeCategory";
 import ChangeUrgency from "../ChangeUrgency/ChangeUrgency";
 import DeleteTask from "../DeleteTask/DeleteTask";
 import { getUser } from "../../api/apiCalls";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   setOpenChangeCategoryDialog,
   setOpenChangeUrgencyDialog,
   setOpenChangeUserDialog,
   setOpenDeleteTaskDialog,
+  setOpenTaskDetailDialog,
 } from "../../store";
 
 export default function TaskDetail(props) {
-  const { open, setOpen, task } = props;
+  const { task } = props;
   const [name, setName] = useState(""); // ok
 
+  let { open } = useSelector((state) => state.taskDetailDialog);
   let dispatch = useDispatch();
 
   useEffect(() => {
@@ -35,7 +37,7 @@ export default function TaskDetail(props) {
   });
 
   const handleClose = () => {
-    setOpen(false);
+    dispatch(setOpenTaskDetailDialog(false));
   };
 
   const deleteTaskOpen = () => {

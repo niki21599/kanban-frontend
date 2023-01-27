@@ -77,6 +77,10 @@ import startDrawerReducer, {
   toggleOpenStartDrawer,
 } from "./slices/startDrawerSlice";
 
+import taskDetailDialogReducer, {
+  setOpenTaskDetailDialog,
+} from "./slices/taskDetailDialogSlice";
+
 let store = configureStore({
   reducer: {
     loginForm: loginFormReducer,
@@ -96,6 +100,7 @@ let store = configureStore({
     changeUserDialog: changeUserDialogReducer,
     deleteTaskDialog: deleteTaskDialogReducer,
     startDrawer: startDrawerReducer,
+    taskDetailDialog: taskDetailDialogReducer,
   },
 });
 
@@ -133,4 +138,5 @@ export {
   setOpenChangeUserDialog,
   setOpenDeleteTaskDialog,
   toggleOpenStartDrawer,
+  setOpenTaskDetailDialog,
 };

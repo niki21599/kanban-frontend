@@ -8,10 +8,13 @@ import { saveChangeCategory } from "../../api/apiCalls";
 
 import { Navigate } from "react-router-dom";
 import NoBoards from "../NoBoards/NoBoards";
+import { useDispatch } from "react-redux";
+import { setOpenTaskDetailDialog } from "../../store";
+import { useState } from "react";
 
-class MainBoard extends React.Component {
-  categories = ["To do", "In progress", "Testing", "Done"];
-  dummyTask = {
+function MainBoard(props) {
+  let categories = ["To do", "In progress", "Testing", "Done"];
+  let dummyTask = {
     fields: {
       user: 1,
       title: "hfjds",
@@ -21,116 +24,100 @@ class MainBoard extends React.Component {
     },
   };
 
-  state = {
-    currentDraggedElement: 0,
-    openDetail: false,
-    pickedTask: this.dummyTask,
+  let dispatch = useDispatch();
+
+  let [currentDraggedElement, setCurrentDraggedElement] = useState(0);
+  let [pickedTask, setPickedTask] = useState(dummyTask);
+
+  let openTaskDetail = (id) => {
+    let [pickedTask] = props.tasks.filter((task) => task.pk == id);
+    setPickedTask(pickedTask);
+
+    dispatch(setOpenTaskDetailDialog(true));
   };
 
-  openTaskDetail = (id) => {
-    let [pickedTask] = this.props.tasks.filter((task) => task.pk == id);
-    this.setState({
-      pickedTask: pickedTask,
-      openDetail: true,
-    });
-  };
-  setOpenDetail = (bool) => {
-    this.setState({ openDetail: bool });
+  let changeDraggedElement = (id) => {
+    setCurrentDraggedElement(id);
   };
 
-  changeDraggedElement = (id) => {
-    this.setState({ currentDraggedElement: id });
-  };
-
-  getTasksOfCategory = (cat) => {
-    let tasks = this.props.tasks.filter((task) => task.fields.category == cat);
+  let getTasksOfCategory = (cat) => {
+    let tasks = props.tasks.filter((task) => task.fields.category == cat);
     return tasks;
   };
-  changeCategory = (cat) => {
-    let items = this.props.tasks;
-    let [item] = items.filter(
-      (item) => this.state.currentDraggedElement === item.pk
-    );
-    let leftItems = items.filter(
-      (item) => this.state.currentDraggedElement !== item.pk
-    );
+  let changeCategory = (cat) => {
+    let items = props.tasks;
+    let [item] = items.filter((item) => currentDraggedElement === item.pk);
+    let leftItems = items.filter((item) => currentDraggedElement !== item.pk);
 
     item.fields.category = cat;
     leftItems.push(item);
-    this.props.handleChangeCat(leftItems);
+    props.handleChangeCat(leftItems);
 
     saveChangeCategory(item.pk, item.fields.category);
   };
 
-  render() {
-    return (
-      <div>
-        {" "}
-        {this.props.loggedIn ? (
-          <div>
-            {" "}
-            {this.props.boardsAdded ? (
-              <div>
-                <AddButton
-                  addBoard={this.props.addBoard}
-                  board={this.props.board}
-                  addTask={this.props.addTask}
-                  addUserToBoard={this.props.addUserToBoard}
-                  changeBoard={this.props.changeBoard}
-                  boardsAdded={this.props.boardsAdded}
-                />{" "}
-                <div className="mainContainer">
-                  <div className="headlineContainer">
-                    <Typography align="center" variant="h4">
-                      {" "}
-                      {this.props
-                        ? this.props.board.fields.name
-                        : "Board Name"}{" "}
-                    </Typography>{" "}
-                  </div>{" "}
-                  <div className="board">
+  return (
+    <div>
+      {" "}
+      {props.loggedIn ? (
+        <div>
+          {" "}
+          {props.boardsAdded ? (
+            <div>
+              <AddButton
+                addBoard={props.addBoard}
+                board={props.board}
+                addTask={props.addTask}
+                addUserToBoard={props.addUserToBoard}
+                changeBoard={props.changeBoard}
+                boardsAdded={props.boardsAdded}
+              />{" "}
+              <div className="mainContainer">
+                <div className="headlineContainer">
+                  <Typography align="center" variant="h4">
                     {" "}
-                    {this.categories.map((cat) => {
-                      return (
-                        <BoardContainer
-                          key={cat}
-                          title={cat}
-                          tasks={this.getTasksOfCategory(cat)}
-                          changeDraggedElement={this.changeDraggedElement}
-                          changeCategory={this.changeCategory}
-                          openDetail={this.openTaskDetail}
-                          board={this.props.board}
-                          addTask={this.props.addTask}
-                        />
-                      );
-                    })}{" "}
-                  </div>{" "}
+                    {props ? props.board.fields.name : "Board Name"}{" "}
+                  </Typography>{" "}
                 </div>{" "}
-                <TaskDetail
-                  open={this.state.openDetail}
-                  setOpen={this.setOpenDetail}
-                  task={this.state.pickedTask}
-                  setOpenDetail={this.setOpenDetail}
-                  handleChangeCatWithOne={this.props.handleChangeCatWithOne}
-                  changeUrgency={this.props.changeUrgency}
-                  changeUser={this.props.changeUser}
-                  board={this.props.board}
-                  deleteTask={this.props.deleteTask}
-                ></TaskDetail>{" "}
-              </div>
-            ) : (
-              <NoBoards
-                changeBoard={this.props.changeBoard}
-                addBoard={this.props.addBoard}
-              />
-            )}{" "}
-          </div>
-        ) : (
-          <Navigate to="/login" />
-        )}{" "}
-      </div>
-    );
-  }
+                <div className="board">
+                  {" "}
+                  {categories.map((cat) => {
+                    return (
+                      <BoardContainer
+                        key={cat}
+                        title={cat}
+                        tasks={getTasksOfCategory(cat)}
+                        changeDraggedElement={changeDraggedElement}
+                        changeCategory={changeCategory}
+                        openDetail={openTaskDetail}
+                        board={props.board}
+                        addTask={props.addTask}
+                      />
+                    );
+                  })}{" "}
+                </div>{" "}
+              </div>{" "}
+              <TaskDetail
+                task={pickedTask}
+                handleChangeCatWithOne={props.handleChangeCatWithOne}
+                changeUrgency={props.changeUrgency}
+                changeUser={props.changeUser}
+                board={props.board}
+                deleteTask={props.deleteTask}
+              ></TaskDetail>{" "}
+            </div>
+          ) : (
+            <NoBoards
+              changeBoard={props.changeBoard}
+              addBoard={props.addBoard}
+            />
+          )}{" "}
+        </div>
+      ) : (
+        <Navigate to="/login" />
+      )}{" "}
+    </div>
+  );
 }
 
 export default MainBoard;
