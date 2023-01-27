@@ -12,14 +12,15 @@ import { InputLabel } from "@mui/material";
 import { Select } from "@mui/material";
 import { getUsersFromBoard, saveChangeUser } from "../../api/apiCalls";
 import { useSelector, useDispatch } from "react-redux";
-import { setUserChangeUserForm } from "../../store";
+import { setUserChangeUserForm, setOpenChangeUserDialog } from "../../store";
 
 export default function ChangeUser(props) {
-  const { open, setOpen, task, changeUser, board } = props;
+  const { task, changeUser, board } = props;
 
   const [possibleUsers, setPossibleUsers] = React.useState([]);
 
   const { user } = useSelector((state) => state.changeUserForm);
+  const { open } = useSelector((state) => state.changeUserDialog);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -36,14 +37,14 @@ export default function ChangeUser(props) {
     changeUser(task.pk, user);
     saveChangeUser(task.pk, user).then((result) => {
       resetState();
-      setOpen(false);
+      dispatch(setOpenChangeUserDialog(false));
     });
   };
   const handleUserChange = (e) => {
     dispatch(setUserChangeUserForm(e.target.value));
   };
   const handleCancel = () => {
-    setOpen(false);
+    dispatch(setOpenChangeUserDialog(false));
     resetState();
   };
   const resetState = () => {

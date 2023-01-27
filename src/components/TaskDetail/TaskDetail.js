@@ -20,11 +20,11 @@ import { useDispatch } from "react-redux";
 import {
   setOpenChangeCategoryDialog,
   setOpenChangeUrgencyDialog,
+  setOpenChangeUserDialog,
 } from "../../store";
 
 export default function TaskDetail(props) {
   const { open, setOpen, task } = props;
-  const [openChangeUser, setOpenChangeUser] = useState(false);
 
   const [openDeleteTask, setOpenDeleteTask] = useState(false);
   const [name, setName] = useState(""); // ok
@@ -43,7 +43,7 @@ export default function TaskDetail(props) {
     setOpenDeleteTask(true);
   };
   const handleUserOpen = () => {
-    setOpenChangeUser(true);
+    dispatch(setOpenChangeUserDialog(true));
   };
 
   const handleCatOpen = () => {
@@ -65,8 +65,6 @@ export default function TaskDetail(props) {
     <div className="relative">
       <Dialog open={open} onClose={handleClose}>
         <ChangeUser
-          open={openChangeUser}
-          setOpen={setOpenChangeUser}
           task={task}
           changeUser={props.changeUser}
           board={props.board}

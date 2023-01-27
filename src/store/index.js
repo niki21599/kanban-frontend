@@ -66,6 +66,10 @@ import changeUrgencyDialogReducer, {
   setOpenChangeUrgencyDialog,
 } from "./slices/changeUrgencyDialogSlice";
 
+import changeUserDialogReducer, {
+  setOpenChangeUserDialog,
+} from "./slices/changeUserDialogSlice";
+
 let store = configureStore({
   reducer: {
     loginForm: loginFormReducer,
@@ -82,6 +86,7 @@ let store = configureStore({
     addTaskDialog: addTaskDialogReducer,
     changeCategoryDialog: changeCategoryDialogReducer,
     changeUrgencyDialog: changeUrgencyDialogReducer,
+    changeUserDialog: changeUserDialogReducer,
   },
 });
 
@@ -116,4 +121,5 @@ export {
   setOpenAddTaskDialog,
   setOpenChangeCategoryDialog,
   setOpenChangeUrgencyDialog,
+  setOpenChangeUserDialog,
 };
