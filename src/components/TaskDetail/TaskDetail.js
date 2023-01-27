@@ -17,12 +17,14 @@ import ChangeUrgency from "../ChangeUrgency/ChangeUrgency";
 import DeleteTask from "../DeleteTask/DeleteTask";
 import { getUser } from "../../api/apiCalls";
 import { useDispatch } from "react-redux";
-import { setOpenChangeCategoryDialog } from "../../store";
+import {
+  setOpenChangeCategoryDialog,
+  setOpenChangeUrgencyDialog,
+} from "../../store";
 
 export default function TaskDetail(props) {
   const { open, setOpen, task } = props;
   const [openChangeUser, setOpenChangeUser] = useState(false);
-  const [openChangeUrgency, setOpenChangeUrgency] = useState(false);
 
   const [openDeleteTask, setOpenDeleteTask] = useState(false);
   const [name, setName] = useState(""); // ok
@@ -49,7 +51,7 @@ export default function TaskDetail(props) {
   };
 
   const handleUrgencyOpen = () => {
-    setOpenChangeUrgency(true);
+    dispatch(setOpenChangeUrgencyDialog(true));
   };
 
   const getUserById = (pk) => {
@@ -74,8 +76,6 @@ export default function TaskDetail(props) {
           handleChangeCatWithOne={props.handleChangeCatWithOne}
         ></ChangeCategory>
         <ChangeUrgency
-          open={openChangeUrgency}
-          setOpen={setOpenChangeUrgency}
           task={task}
           changeUrgency={props.changeUrgency}
         ></ChangeUrgency>

@@ -11,13 +11,17 @@ import { InputLabel } from "@mui/material";
 import { Select } from "@mui/material";
 import { saveChangeUrgency } from "../../api/apiCalls";
 import { useSelector, useDispatch } from "react-redux";
-import { setUrgencyChangeUrgencyForm } from "../../store";
+import {
+  setUrgencyChangeUrgencyForm,
+  setOpenChangeUrgencyDialog,
+} from "../../store";
 import { useEffect } from "react";
 
 export default function ChangeUrgency(props) {
-  const { open, setOpen, task, changeUrgency } = props;
+  const { task, changeUrgency } = props;
 
   const { urgency } = useSelector((state) => state.changeUrgencyForm);
+  const { open } = useSelector((state) => state.changeUrgencyDialog);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -27,7 +31,7 @@ export default function ChangeUrgency(props) {
   const handleClose = () => {
     changeUrgency(task.pk, urgency);
     saveChangeUrgency(task.pk, urgency).then((result) => {
-      setOpen(false);
+      dispatch(setOpenChangeUrgencyDialog(false));
       resetState();
     });
   };
@@ -35,7 +39,7 @@ export default function ChangeUrgency(props) {
     dispatch(setUrgencyChangeUrgencyForm(e.target.value));
   };
   const handleCancel = () => {
-    setOpen(false);
+    dispatch(setOpenChangeUrgencyDialog(false));
     resetState();
   };
   const resetState = () => {
