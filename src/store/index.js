@@ -50,6 +50,10 @@ import addButtonDialogReducer, {
   setOpenAddButtonDialog,
 } from "./slices/addButtonDialogSlice";
 
+import addBoardDialogReducer, {
+  setOpenAddBoardDialog,
+} from "./slices/addBoardDialogSlice";
+
 let store = configureStore({
   reducer: {
     loginForm: loginFormReducer,
@@ -62,6 +66,7 @@ let store = configureStore({
     addUserDialog: addUserDialogReducer,
     addUserForm: addUserFormReducer,
     addButtonDialog: addButtonDialogReducer,
+    addBoardDialog: addBoardDialogReducer,
   },
 });
 
@@ -92,4 +97,5 @@ export {
   setOpenAddUserDialog,
   setCheckedAddUserForm,
   setOpenAddButtonDialog,
+  setOpenAddBoardDialog,
 };

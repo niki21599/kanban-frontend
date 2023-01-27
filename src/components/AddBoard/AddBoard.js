@@ -8,11 +8,11 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { addBoard } from "../../api/apiCalls";
-import { setNameAddBoardForm } from "../../store";
+import { setNameAddBoardForm, setOpenAddBoardDialog } from "../../store";
 import { useSelector, useDispatch } from "react-redux";
 
 export default function AddBoard(props) {
-  const { open, setOpen } = props;
+  const { open } = useSelector((state) => state.addBoardDialog);
 
   let { name } = useSelector((state) => state.addBoardForm);
   let dispatch = useDispatch();
@@ -22,13 +22,13 @@ export default function AddBoard(props) {
       let [board] = result;
       props.addBoard(board);
       props.changeBoard(board);
-      setOpen(false);
+      dispatch(setOpenAddBoardDialog(false));
       resetState();
     });
   };
 
   const handleCancel = () => {
-    setOpen(false);
+    dispatch(setOpenAddBoardDialog(false));
     resetState();
   };
   const resetState = () => {

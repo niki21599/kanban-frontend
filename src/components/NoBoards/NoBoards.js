@@ -5,13 +5,16 @@ import { Button } from "@mui/material";
 import { Card, Typography } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
+import { useDispatch, useSelector } from "react-redux";
+import { setOpenAddBoardDialog } from "../../store";
 
 export default function NoBoards(props) {
-  const [open, setOpen] = React.useState(false);
   const [loading, setLoading] = React.useState(true);
 
-  let openDialog = () => {
-    setOpen(true);
+  const dispatch = useDispatch();
+
+  let openAddBoardDialog = () => {
+    dispatch(setOpenAddBoardDialog(true));
   };
 
   setTimeout(() => {
@@ -46,7 +49,7 @@ export default function NoBoards(props) {
 
             <Button
               variant="contained"
-              onClick={openDialog}
+              onClick={openAddBoardDialog}
               sx={{ mt: 2, ml: "50px", mr: "50px", mb: 2, width: "200px" }}
               fullWidth
             >
@@ -55,8 +58,6 @@ export default function NoBoards(props) {
           </Card>
 
           <AddBoard
-            open={open}
-            setOpen={setOpen}
             addBoard={props.addBoard}
             changeBoard={props.changeBoard}
           ></AddBoard>

@@ -14,8 +14,8 @@ import AddTask from "../AddTask/AddTask";
 import AddUser from "../AddUser/AddUser";
 import { useDispatch, useSelector } from "react-redux";
 import { setOpenAddUserDialog } from "../../store";
-
 import { setOpenAddButtonDialog } from "../../store";
+import { setOpenAddBoardDialog } from "../../store";
 
 const actions = [
   { icon: <AssignmentOutlinedIcon />, name: "New Task" },
@@ -26,7 +26,6 @@ const actions = [
 export default function AddButton(props) {
   const { open } = useSelector((state) => state.addButtonDialog);
 
-  const [newBoard, setNewBoard] = React.useState(false);
   let dispatch = useDispatch();
 
   const [addTask, setAddTask] = React.useState(false);
@@ -41,7 +40,7 @@ export default function AddButton(props) {
       dispatch(setOpenAddUserDialog(true));
     }
     if (name === "New Board") {
-      setNewBoard(true);
+      dispatch(setOpenAddBoardDialog(true));
     }
   };
 
@@ -66,8 +65,6 @@ export default function AddButton(props) {
         ))}{" "}
       </SpeedDial>{" "}
       <AddBoard
-        open={newBoard}
-        setOpen={setNewBoard}
         addBoard={props.addBoard}
         changeBoard={props.changeBoard}
       ></AddBoard>{" "}
