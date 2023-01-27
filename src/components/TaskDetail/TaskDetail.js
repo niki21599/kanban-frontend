@@ -16,14 +16,18 @@ import ChangeCategory from "../ChangeCategory/ChangeCategory";
 import ChangeUrgency from "../ChangeUrgency/ChangeUrgency";
 import DeleteTask from "../DeleteTask/DeleteTask";
 import { getUser } from "../../api/apiCalls";
+import { useDispatch } from "react-redux";
+import { setOpenChangeCategoryDialog } from "../../store";
 
 export default function TaskDetail(props) {
   const { open, setOpen, task } = props;
   const [openChangeUser, setOpenChangeUser] = useState(false);
   const [openChangeUrgency, setOpenChangeUrgency] = useState(false);
-  const [openChangeCategory, setOpenChangeCategory] = useState(false);
+
   const [openDeleteTask, setOpenDeleteTask] = useState(false);
   const [name, setName] = useState(""); // ok
+
+  let dispatch = useDispatch();
 
   useEffect(() => {
     getUserById(task.fields.user);
@@ -41,7 +45,7 @@ export default function TaskDetail(props) {
   };
 
   const handleCatOpen = () => {
-    setOpenChangeCategory(true);
+    dispatch(setOpenChangeCategoryDialog(true));
   };
 
   const handleUrgencyOpen = () => {
@@ -66,8 +70,6 @@ export default function TaskDetail(props) {
           board={props.board}
         ></ChangeUser>
         <ChangeCategory
-          open={openChangeCategory}
-          setOpen={setOpenChangeCategory}
           task={task}
           handleChangeCatWithOne={props.handleChangeCatWithOne}
         ></ChangeCategory>

@@ -13,12 +13,14 @@ import { saveChangeCategory } from "../../api/apiCalls";
 import { useSelector, useDispatch } from "react-redux";
 import { setCategoryChangeCategoryForm } from "../../store";
 import { useEffect } from "react";
+import { setOpenChangeCategoryDialog } from "../../store";
 
 export default function ChangeCategory(props) {
-  const { open, setOpen, task, handleChangeCatWithOne } = props;
-  //const [category, setCategory] = React.useState(task.fields.category);
+  const { task, handleChangeCatWithOne } = props;
 
   const { category } = useSelector((state) => state.changeCategoryForm);
+
+  const { open } = useSelector((state) => state.changeCategoryDialog);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -29,7 +31,7 @@ export default function ChangeCategory(props) {
     handleChangeCatWithOne(task.pk, category);
     saveChangeCategory(task.pk, category).then((result) => {
       resetState();
-      return setOpen(false);
+      return dispatch(setOpenChangeCategoryDialog(false));
     });
   };
 
@@ -38,7 +40,7 @@ export default function ChangeCategory(props) {
   };
 
   const handleCancel = () => {
-    setOpen(false);
+    dispatch(setOpenChangeCategoryDialog(false));
     resetState();
   };
   const resetState = () => {
