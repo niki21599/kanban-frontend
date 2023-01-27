@@ -14,12 +14,15 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import { getBoards } from "../../api/apiCalls";
+import { useSelector, useDispatch } from "react-redux";
+import { toggleOpenStartDrawer } from "../../store";
 
 export default function Navbar(props) {
-  let [openDrawer, setOpenDrawer] = React.useState(false);
+  let { openDrawer } = useSelector((state) => state.startDrawer);
+  let dispatch = useDispatch();
 
   let toggleDrawer = () => {
-    setOpenDrawer(!openDrawer);
+    dispatch(toggleOpenStartDrawer());
   };
   let handleLogout = () => {
     // API Call needed ?
