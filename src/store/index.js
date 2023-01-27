@@ -54,6 +54,10 @@ import addBoardDialogReducer, {
   setOpenAddBoardDialog,
 } from "./slices/addBoardDialogSlice";
 
+import addTaskDialogReducer, {
+  setOpenAddTaskDialog,
+} from "./slices/addTaskDialogSlice";
+
 let store = configureStore({
   reducer: {
     loginForm: loginFormReducer,
@@ -67,6 +71,7 @@ let store = configureStore({
     addUserForm: addUserFormReducer,
     addButtonDialog: addButtonDialogReducer,
     addBoardDialog: addBoardDialogReducer,
+    addTaskDialog: addTaskDialogReducer,
   },
 });
 
@@ -98,4 +103,5 @@ export {
   setCheckedAddUserForm,
   setOpenAddButtonDialog,
   setOpenAddBoardDialog,
+  setOpenAddTaskDialog,
 };

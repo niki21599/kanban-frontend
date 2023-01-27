@@ -5,9 +5,12 @@ import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add";
 import Task from "../Task/Task";
 import AddTask from "../AddTask/AddTask";
+import { setOpenAddTaskDialog } from "../../store";
+import { useDispatch } from "react-redux";
 
 export default function BoardContainer(props) {
-  const [addTask, setAddTask] = React.useState(false);
+  let dispatch = useDispatch();
+
   let moveTo = (category) => {
     props.changeCategory(category);
   };
@@ -16,7 +19,7 @@ export default function BoardContainer(props) {
   };
 
   const handleAddTask = () => {
-    setAddTask(true);
+    dispatch(setOpenAddTaskDialog(true));
   };
   return (
     <div className="boardContainer" id={props.title}>
@@ -44,8 +47,6 @@ export default function BoardContainer(props) {
         ))}{" "}
       </div>{" "}
       <AddTask
-        open={addTask}
-        setOpen={setAddTask}
         category={props.title}
         board={props.board}
         addTask={props.addTask}

@@ -22,10 +22,11 @@ import {
   setTitleAddTaskForm,
   setUrgencyAddTaskForm,
   resetAddTaskForm,
+  setOpenAddTaskDialog,
 } from "../../store";
 
 export default function AddTask(props) {
-  const { open, setOpen } = props;
+  const { open } = useSelector((state) => state.addTaskDialog);
 
   const [possibleUsers, setPossibleUsers] = React.useState([]);
 
@@ -42,7 +43,7 @@ export default function AddTask(props) {
 
   useEffect(() => {
     dispatch(setCategoryAddTaskForm(props.category));
-  }, [open]);
+  }, []);
 
   const handleClose = () => {
     addTask(
@@ -56,13 +57,13 @@ export default function AddTask(props) {
     ).then((result) => {
       let [task] = result;
       props.addTask(task);
-      setOpen(false);
+      dispatch(setOpenAddTaskDialog(false));
       dispatch(resetAddTaskForm());
     });
   };
 
   const handleCancel = () => {
-    setOpen(false);
+    dispatch(setOpenAddTaskDialog(false));
     dispatch(resetAddTaskForm());
   };
 
