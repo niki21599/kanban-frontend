@@ -16,6 +16,7 @@ import {
   setUserChangeUserForm,
   setOpenChangeUserDialog,
   useChangeUserMutation,
+  useGetAddedUsersQuery,
 } from "../../store";
 
 export default function ChangeUser() {
@@ -23,19 +24,13 @@ export default function ChangeUser() {
 
   const { task } = useSelector((state) => state.selectedTask);
 
-  const [possibleUsers, setPossibleUsers] = React.useState([]);
+  let { data, isFecthing, error } = useGetAddedUsersQuery(board.pk);
 
   const { user } = useSelector((state) => state.changeUserForm);
   const { open } = useSelector((state) => state.changeUserDialog);
   const dispatch = useDispatch();
 
   const [changeUser, result] = useChangeUserMutation();
-
-  useEffect(() => {
-    getUsersFromBoard(board.pk).then((result) => {
-      setPossibleUsers(result);
-    });
-  }, [board]);
 
   useEffect(() => {
     dispatch(setUserChangeUserForm(task.fields.user));
@@ -81,11 +76,13 @@ export default function ChangeUser() {
               id: "select-user",
             }}
           >
-            {possibleUsers.map((user) => (
-              <MenuItem key={user.pk} value={user.pk}>
-                {user.fields.first_name + " " + user.fields.last_name}
-              </MenuItem>
-            ))}
+            {data
+              ? data.map((user) => (
+                  <MenuItem key={user.pk} value={user.pk}>
+                    {user.fields.first_name + " " + user.fields.last_name}
+                  </MenuItem>
+                ))
+              : ""}
           </Select>
         </FormControl>
       </DialogContent>

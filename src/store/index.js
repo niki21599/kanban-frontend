@@ -173,6 +173,8 @@ export {
   useAddBoardMutation,
   useFetchBoardsQuery,
   useAddUsersToBoardMutation,
+  useGetAddedUsersQuery,
+  useGetNotAddedUsersQuery,
 } from "./apis/boardsApi";
 export {
   useAddTaskMutation,

@@ -12,11 +12,14 @@ import Checkbox from "@mui/material/Checkbox";
 import { addUserToBoard, getUsersNotAddedToBoard } from "../../api/apiCalls";
 import { useSelector, useDispatch } from "react-redux";
 import { setOpenAddUserDialog, setCheckedAddUserForm } from "../../store";
-import { useAddUsersToBoardMutation } from "../../store";
+import {
+  useAddUsersToBoardMutation,
+  useGetNotAddedUsersQuery,
+} from "../../store";
 
 export default function AddUser(props) {
   const { board } = useSelector((state) => state.activeBoard);
-  const [possibleUsers, setPossibleUsers] = React.useState([]);
+  //const [possibleUsers, setPossibleUsers] = React.useState([]);
 
   const { open } = useSelector((state) => state.addUserDialog);
   const { checked } = useSelector((state) => state.addUserForm);
@@ -24,20 +27,21 @@ export default function AddUser(props) {
   const dispatch = useDispatch();
   let [addUsersToBoard, results] = useAddUsersToBoardMutation();
 
+  let { data, isFetching, error } = useGetNotAddedUsersQuery(board.pk);
+
   useEffect(() => {
-    getUsersNotAddedToBoard(board.pk).then((result) => {
-      setPossibleUsers(result);
-      let newChecked = new Array(possibleUsers.length).fill(false);
+    if (data) {
+      let newChecked = new Array(data.length).fill(false);
       dispatch(setCheckedAddUserForm(newChecked));
-    });
+    }
   }, [board]);
 
   const handleClose = () => {
     let user_ids = [];
-    for (let index = 0; index < possibleUsers.length; index++) {
+    for (let index = 0; index < data.length; index++) {
       const element = checked[index];
       if (element) {
-        user_ids.push(possibleUsers[index].pk);
+        user_ids.push(data[index].pk);
       }
     }
 
@@ -64,6 +68,30 @@ export default function AddUser(props) {
     dispatch(setCheckedAddUserForm(items));
   };
 
+  let usersList;
+
+  if (isFetching) {
+    usersList = <div> Loading</div>;
+  }
+  if (error) {
+    usersList = <div> Error </div>;
+  }
+  if (data) {
+    usersList = data.map((user, index) => (
+      <FormControlLabel
+        key={user.pk}
+        control={
+          <Checkbox
+            checked={checked[index] ? checked[index] : false}
+            onChange={(event) => handleChange(event, index)}
+          />
+        }
+        value={user.pk}
+        label={user.fields.first_name + " " + user.fields.last_name}
+      />
+    ));
+  }
+
   return (
     <Dialog open={open} onClose={handleCancel}>
       <DialogTitle> Add User </DialogTitle>{" "}
@@ -71,24 +99,7 @@ export default function AddUser(props) {
         <DialogContentText>
           Select the Users you would like to add.{" "}
         </DialogContentText>{" "}
-        <FormGroup>
-          {" "}
-          {possibleUsers.length > 0
-            ? possibleUsers.map((user, index) => (
-                <FormControlLabel
-                  key={user.pk}
-                  control={
-                    <Checkbox
-                      checked={checked[index] ? checked[index] : false}
-                      onChange={(event) => handleChange(event, index)}
-                    />
-                  }
-                  value={user.pk}
-                  label={user.fields.first_name + " " + user.fields.last_name}
-                />
-              ))
-            : ""}{" "}
-        </FormGroup>{" "}
+        <FormGroup> {usersList} </FormGroup>{" "}
       </DialogContent>{" "}
       <DialogActions>
         <Button onClick={handleCancel}> Cancel </Button>{" "}

@@ -55,7 +55,43 @@ const boardsApi = createApi({
             method: "POST",
           };
         },
-        invalidatesTags: ["Post"],
+        invalidatesTags: ["Post", "User"],
+      }),
+      getAddedUsers: builder.query({
+        query: (board_id) => {
+          return {
+            url: "task/user/",
+            headers: {
+              Authorization: token,
+            },
+            params: {
+              board_id,
+            },
+            method: "GET",
+          };
+        },
+        providesTags: (result, error, arg) =>
+          result
+            ? [...result.map(({ id }) => ({ type: "User", id })), "User"]
+            : ["User"],
+      }),
+      getNotAddedUsers: builder.query({
+        query: (board_id) => {
+          return {
+            url: "board/user/",
+            headers: {
+              Authorization: token,
+            },
+            params: {
+              board_id,
+            },
+            method: "GET",
+          };
+        },
+        providesTags: (result, error, arg) =>
+          result
+            ? [...result.map(({ id }) => ({ type: "User", id })), "User"]
+            : ["User"],
       }),
     };
   },
@@ -65,6 +101,8 @@ export const {
   useFetchBoardsQuery,
   useAddBoardMutation,
   useAddUsersToBoardMutation,
+  useGetAddedUsersQuery,
+  useGetNotAddedUsersQuery,
 } = boardsApi;
 
 export { boardsApi };

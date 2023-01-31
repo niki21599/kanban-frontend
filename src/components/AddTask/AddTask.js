@@ -23,6 +23,7 @@ import {
   setUrgencyAddTaskForm,
   resetAddTaskForm,
   setOpenAddTaskDialog,
+  useGetAddedUsersQuery,
 } from "../../store";
 
 import { useAddTaskMutation } from "../../store";
@@ -30,21 +31,14 @@ import { useAddTaskMutation } from "../../store";
 export default function AddTask(props) {
   const { open } = useSelector((state) => state.addTaskDialog);
 
-  const [possibleUsers, setPossibleUsers] = React.useState([]);
-
   let { user, title, urgency, color, category, description } = useSelector(
     (state) => state.addTaskForm
   );
 
   let { board } = useSelector((state) => state.activeBoard);
+  let { data, isFetching, error } = useGetAddedUsersQuery(board.pk);
   let dispatch = useDispatch();
   let [addTask, results] = useAddTaskMutation();
-
-  useEffect(() => {
-    getUsersFromBoard(board.pk).then((result) => {
-      setPossibleUsers(result);
-    });
-  }, [board]);
 
   // useEffect(() => {
   //   dispatch(setCategoryAddTaskForm(props.category));
@@ -91,9 +85,17 @@ export default function AddTask(props) {
   };
 
   return (
-    <Dialog open={open} onClose={handleCancel}>
+    <Dialog
+      open={open}
+      onClose={handleCancel}
+      BackdropProps={{
+        style: {
+          backgroundColor: "rgba(0,0,0,0.15)",
+        },
+      }}
+    >
       <DialogTitle> Add Task </DialogTitle>{" "}
-      <DialogContent>
+      <DialogContent sx={{ boxShadow: "none !important" }}>
         <DialogContentText>
           Type in your Task Data for your selected Board{" "}
         </DialogContentText>{" "}
@@ -159,12 +161,14 @@ export default function AddTask(props) {
               id: "select-user",
             }}
           >
-            {possibleUsers.map((user) => (
-              <MenuItem key={user.pk} value={user.pk}>
-                {" "}
-                {user.fields.first_name + " " + user.fields.last_name}{" "}
-              </MenuItem>
-            ))}{" "}
+            {data
+              ? data.map((user) => (
+                  <MenuItem key={user.pk} value={user.pk}>
+                    {" "}
+                    {user.fields.first_name + " " + user.fields.last_name}{" "}
+                  </MenuItem>
+                ))
+              : ""}{" "}
           </Select>{" "}
         </FormControl>{" "}
         <FormControl sx={{ mt: 2, mb: 2, minWidth: 250, width: "50%" }}>
