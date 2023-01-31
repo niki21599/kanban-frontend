@@ -12,15 +12,17 @@ import Checkbox from "@mui/material/Checkbox";
 import { addUserToBoard, getUsersNotAddedToBoard } from "../../api/apiCalls";
 import { useSelector, useDispatch } from "react-redux";
 import { setOpenAddUserDialog, setCheckedAddUserForm } from "../../store";
+import { useAddUsersToBoardMutation } from "../../store";
 
 export default function AddUser(props) {
-  const { board } = props;
+  const { board } = useSelector((state) => state.activeBoard);
   const [possibleUsers, setPossibleUsers] = React.useState([]);
 
   const { open } = useSelector((state) => state.addUserDialog);
   const { checked } = useSelector((state) => state.addUserForm);
 
   const dispatch = useDispatch();
+  let [addUsersToBoard, results] = useAddUsersToBoardMutation();
 
   useEffect(() => {
     getUsersNotAddedToBoard(board.pk).then((result) => {
@@ -39,8 +41,10 @@ export default function AddUser(props) {
       }
     }
 
-    addUserToBoard(board.pk, user_ids);
-    props.addUserToBoard(user_ids);
+    console.log("Data", board.pk, user_ids);
+    let boardAndUser = { board_id: board.pk, user_ids };
+    addUsersToBoard(boardAndUser);
+    //props.addUserToBoard(user_ids);
     dispatch(setOpenAddUserDialog(false));
     resetState();
   };

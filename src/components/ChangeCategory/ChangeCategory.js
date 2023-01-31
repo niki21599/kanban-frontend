@@ -13,26 +13,30 @@ import { saveChangeCategory } from "../../api/apiCalls";
 import { useSelector, useDispatch } from "react-redux";
 import { setCategoryChangeCategoryForm } from "../../store";
 import { useEffect } from "react";
-import { setOpenChangeCategoryDialog } from "../../store";
+import {
+  setOpenChangeCategoryDialog,
+  useChangeCategoryMutation,
+} from "../../store";
 
-export default function ChangeCategory(props) {
-  const { task, handleChangeCatWithOne } = props;
+export default function ChangeCategory() {
+  const { task } = useSelector((state) => state.selectedTask);
 
   const { category } = useSelector((state) => state.changeCategoryForm);
 
   const { open } = useSelector((state) => state.changeCategoryDialog);
   const dispatch = useDispatch();
 
+  let [changeCategory, results] = useChangeCategoryMutation();
+
   useEffect(() => {
     dispatch(setCategoryChangeCategoryForm(task.fields.category));
   }, []);
 
-  const handleClose = () => {
-    handleChangeCatWithOne(task.pk, category);
-    saveChangeCategory(task.pk, category).then((result) => {
-      resetState();
-      return dispatch(setOpenChangeCategoryDialog(false));
-    });
+  const handleClose = async () => {
+    let data = { task_id: task.pk, newCategory: category };
+    let newCategory = await changeCategory(data);
+    resetState();
+    dispatch(setOpenChangeCategoryDialog(false));
   };
 
   const handleCategoryChange = (e) => {

@@ -81,6 +81,19 @@ import taskDetailDialogReducer, {
   setOpenTaskDetailDialog,
 } from "./slices/taskDetailDialogSlice";
 
+import activeBoardReducer, { setActiveBoard } from "./slices/activeBoardSlice";
+import selectedTaskReducer, {
+  setSelectedTask,
+} from "./slices/selectedTaskSlice";
+
+import draggedTaskReducer, {
+  setCurrentDraggedElement,
+} from "./slices/draggedTaskSlice";
+
+import { boardsApi } from "./apis/boardsApi";
+import { setupListeners } from "@reduxjs/toolkit/dist/query";
+import { tasksApi } from "./apis/tasksApi";
+
 let store = configureStore({
   reducer: {
     loginForm: loginFormReducer,
@@ -101,8 +114,20 @@ let store = configureStore({
     deleteTaskDialog: deleteTaskDialogReducer,
     startDrawer: startDrawerReducer,
     taskDetailDialog: taskDetailDialogReducer,
+    activeBoard: activeBoardReducer,
+    selectedTask: selectedTaskReducer,
+    draggedTask: draggedTaskReducer,
+    [boardsApi.reducerPath]: boardsApi.reducer,
+    [tasksApi.reducerPath]: tasksApi.reducer,
+  },
+  middleware: (getDefaultMiddleware) => {
+    return getDefaultMiddleware()
+      .concat(boardsApi.middleware)
+      .concat(tasksApi.middleware);
   },
 });
+
+setupListeners(store.dispatch);
 
 export {
   store,
@@ -139,4 +164,21 @@ export {
   setOpenDeleteTaskDialog,
   toggleOpenStartDrawer,
   setOpenTaskDetailDialog,
+  setActiveBoard,
+  setSelectedTask,
+  setCurrentDraggedElement,
 };
+
+export {
+  useAddBoardMutation,
+  useFetchBoardsQuery,
+  useAddUsersToBoardMutation,
+} from "./apis/boardsApi";
+export {
+  useAddTaskMutation,
+  useChangeCategoryMutation,
+  useChangeUrgencyMutation,
+  useChangeUserMutation,
+  useDeleteTaskMutation,
+  useFetchTasksQuery,
+} from "./apis/tasksApi";

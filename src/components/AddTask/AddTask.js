@@ -25,6 +25,8 @@ import {
   setOpenAddTaskDialog,
 } from "../../store";
 
+import { useAddTaskMutation } from "../../store";
+
 export default function AddTask(props) {
   const { open } = useSelector((state) => state.addTaskDialog);
 
@@ -33,33 +35,35 @@ export default function AddTask(props) {
   let { user, title, urgency, color, category, description } = useSelector(
     (state) => state.addTaskForm
   );
+
+  let { board } = useSelector((state) => state.activeBoard);
   let dispatch = useDispatch();
+  let [addTask, results] = useAddTaskMutation();
 
   useEffect(() => {
-    getUsersFromBoard(props.board.pk).then((result) => {
+    getUsersFromBoard(board.pk).then((result) => {
       setPossibleUsers(result);
     });
-  }, [props.board]);
+  }, [board]);
 
-  useEffect(() => {
-    dispatch(setCategoryAddTaskForm(props.category));
-  }, []);
+  // useEffect(() => {
+  //   dispatch(setCategoryAddTaskForm(props.category));
+  // }, [props.category]);
 
-  const handleClose = () => {
-    addTask(
+  const handleClose = async () => {
+    let task = {
       title,
       urgency,
       category,
-      user,
-      props.board.pk,
+      user_id: user,
+      board_id: board.pk,
       color,
-      description
-    ).then((result) => {
-      let [task] = result;
-      props.addTask(task);
-      dispatch(setOpenAddTaskDialog(false));
-      dispatch(resetAddTaskForm());
-    });
+      description,
+    };
+
+    let newTask = await addTask(task);
+    dispatch(setOpenAddTaskDialog(false));
+    dispatch(resetAddTaskForm());
   };
 
   const handleCancel = () => {

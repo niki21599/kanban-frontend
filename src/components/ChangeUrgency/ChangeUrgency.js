@@ -14,26 +14,29 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   setUrgencyChangeUrgencyForm,
   setOpenChangeUrgencyDialog,
+  useChangeUrgencyMutation,
 } from "../../store";
 import { useEffect } from "react";
 
-export default function ChangeUrgency(props) {
-  const { task, changeUrgency } = props;
+export default function ChangeUrgency() {
+  const { task } = useSelector((state) => state.selectedTask);
 
   const { urgency } = useSelector((state) => state.changeUrgencyForm);
   const { open } = useSelector((state) => state.changeUrgencyDialog);
   const dispatch = useDispatch();
 
+  let [changeUrgency, result] = useChangeUrgencyMutation();
+
   useEffect(() => {
     dispatch(setUrgencyChangeUrgencyForm(task.fields.urgency));
   }, []);
 
-  const handleClose = () => {
-    changeUrgency(task.pk, urgency);
-    saveChangeUrgency(task.pk, urgency).then((result) => {
-      dispatch(setOpenChangeUrgencyDialog(false));
-      resetState();
-    });
+  const handleClose = async () => {
+    let data = { task_id: task.pk, newUrgency: urgency };
+    let newUrgency = await changeUrgency(data);
+
+    dispatch(setOpenChangeUrgencyDialog(false));
+    resetState();
   };
   const handleUrgencyChange = (e) => {
     dispatch(setUrgencyChangeUrgencyForm(e.target.value));

@@ -8,20 +8,21 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import { deleteTask } from "../../api/apiCalls";
 import { useSelector, useDispatch } from "react-redux";
-import { setOpenDeleteTaskDialog } from "../../store";
+import { setOpenDeleteTaskDialog, setOpenTaskDetailDialog } from "../../store";
+import { useDeleteTaskMutation } from "../../store";
 
-export default function DeleteTask(props) {
-  const { task } = props;
+export default function DeleteTask() {
+  const { task } = useSelector((state) => state.selectedTask);
 
   let { open } = useSelector((state) => state.deleteTaskDialog);
   let dispatch = useDispatch();
+  let [deleteTask, result] = useDeleteTaskMutation();
 
   const handleClose = () => {
-    props.deleteTask(task.pk);
-    deleteTask(task.pk).then((result) => {
-      dispatch(setOpenDeleteTaskDialog(false));
-      props.setOpenDetail(false);
-    });
+    deleteTask(task.pk);
+
+    dispatch(setOpenDeleteTaskDialog(false));
+    dispatch(setOpenTaskDetailDialog(false));
   };
   const handleCancel = () => {
     dispatch(setOpenDeleteTaskDialog(false));

@@ -2,17 +2,31 @@ import React from "react";
 import "./Task.css";
 import Card from "@mui/material/Card";
 import { Typography } from "@mui/material";
+import { useDispatch } from "react-redux";
+import {
+  setCurrentDraggedElement,
+  setSelectedTask,
+  setOpenTaskDetailDialog,
+} from "../../store";
 
 export default function Task(props) {
-  let startDragging = (id) => {
-    props.changeDraggedElement(id);
+  let dispatch = useDispatch();
+
+  let startDragging = () => {
+    dispatch(setCurrentDraggedElement(props.task.pk));
   };
+
+  let openTaskDetail = () => {
+    dispatch(setSelectedTask(props.task));
+    dispatch(setOpenTaskDetailDialog(true));
+  };
+
   return (
     <Card
       className={"taskCard " + props.task.fields.color}
       draggable="true"
-      onDragStart={() => startDragging(props.task.pk)}
-      onClick={() => props.openDetail(props.task.pk)}
+      onDragStart={startDragging}
+      onClick={openTaskDetail}
     >
       <Typography variant="h6"> {props.task.fields.title} </Typography>{" "}
     </Card>

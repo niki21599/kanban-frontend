@@ -7,8 +7,13 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import { addBoard } from "../../api/apiCalls";
-import { setNameAddBoardForm, setOpenAddBoardDialog } from "../../store";
+
+import {
+  setActiveBoard,
+  setNameAddBoardForm,
+  setOpenAddBoardDialog,
+  useAddBoardMutation,
+} from "../../store";
 import { useSelector, useDispatch } from "react-redux";
 
 export default function AddBoard(props) {
@@ -17,14 +22,23 @@ export default function AddBoard(props) {
   let { name } = useSelector((state) => state.addBoardForm);
   let dispatch = useDispatch();
 
-  const handleClose = () => {
-    addBoard(name).then((result) => {
-      let [board] = result;
-      props.addBoard(board);
-      props.changeBoard(board);
-      dispatch(setOpenAddBoardDialog(false));
-      resetState();
-    });
+  let [addBoard, addBoardResults] = useAddBoardMutation();
+
+  const handleClose = async () => {
+    let { data } = await addBoard(name);
+    let newBoard = data[0];
+
+    dispatch(setActiveBoard(newBoard));
+    dispatch(setOpenAddBoardDialog(false));
+    resetState();
+
+    // addBoard(name).then((result) => {
+    //   let [board] = result;
+    //   props.addBoard(board);
+    //   props.changeBoard(board);
+    //   dispatch(setOpenAddBoardDialog(false));
+    //   resetState();
+    // });
   };
 
   const handleCancel = () => {

@@ -25,8 +25,8 @@ import {
   setOpenTaskDetailDialog,
 } from "../../store";
 
-export default function TaskDetail(props) {
-  const { task } = props;
+export default function TaskDetail() {
+  const { task } = useSelector((state) => state.selectedTask);
   const [name, setName] = useState(""); // ok
 
   let { open } = useSelector((state) => state.taskDetailDialog);
@@ -65,24 +65,10 @@ export default function TaskDetail(props) {
   return (
     <div className="relative">
       <Dialog open={open} onClose={handleClose}>
-        <ChangeUser
-          task={task}
-          changeUser={props.changeUser}
-          board={props.board}
-        ></ChangeUser>
-        <ChangeCategory
-          task={task}
-          handleChangeCatWithOne={props.handleChangeCatWithOne}
-        ></ChangeCategory>
-        <ChangeUrgency
-          task={task}
-          changeUrgency={props.changeUrgency}
-        ></ChangeUrgency>
-        <DeleteTask
-          task={task}
-          setOpenDetail={props.setOpenDetail}
-          deleteTask={props.deleteTask}
-        ></DeleteTask>
+        <ChangeUser></ChangeUser>
+        <ChangeCategory></ChangeCategory>
+        <ChangeUrgency></ChangeUrgency>
+        <DeleteTask></DeleteTask>
         <Fab
           variant="extended"
           onClick={handleUserOpen}

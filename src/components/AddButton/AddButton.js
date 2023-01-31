@@ -64,19 +64,8 @@ export default function AddButton(props) {
           />
         ))}{" "}
       </SpeedDial>{" "}
-      <AddBoard
-        addBoard={props.addBoard}
-        changeBoard={props.changeBoard}
-      ></AddBoard>{" "}
-      <AddTask
-        board={props.board}
-        addTask={props.addTask}
-        category="To do"
-      ></AddTask>{" "}
-      <AddUser
-        board={props.board}
-        addUserToBoard={props.addUserToBoard}
-      ></AddUser>{" "}
+      <AddBoard></AddBoard> <AddTask category="To do"></AddTask>{" "}
+      <AddUser></AddUser>{" "}
     </div>
   );
 }

@@ -6,13 +6,22 @@ import AddIcon from "@mui/icons-material/Add";
 import Task from "../Task/Task";
 import AddTask from "../AddTask/AddTask";
 import { setOpenAddTaskDialog } from "../../store";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setSelectedTask,
+  setOpenTaskDetailDialog,
+  useChangeCategoryMutation,
+} from "../../store";
 
 export default function BoardContainer(props) {
   let dispatch = useDispatch();
+  let { board } = useSelector((state) => state.activeBoard);
+  let { currentDraggedElement } = useSelector((state) => state.draggedTask);
+  let [changeCategory, results] = useChangeCategoryMutation();
 
-  let moveTo = (category) => {
-    props.changeCategory(category);
+  let moveTo = async (category) => {
+    let data = { task_id: currentDraggedElement, newCategory: category };
+    await changeCategory(data);
   };
   let allowDrop = (event) => {
     event.preventDefault();
@@ -38,19 +47,10 @@ export default function BoardContainer(props) {
         onDragOver={(event) => allowDrop(event)}
       >
         {props.tasks.map((task) => (
-          <Task
-            task={task}
-            key={task.pk}
-            changeDraggedElement={props.changeDraggedElement}
-            openDetail={props.openDetail}
-          />
+          <Task task={task} key={task.pk} />
         ))}{" "}
       </div>{" "}
-      <AddTask
-        category={props.title}
-        board={props.board}
-        addTask={props.addTask}
-      ></AddTask>{" "}
+      <AddTask category={props.title}></AddTask>{" "}
     </div>
   );
 }

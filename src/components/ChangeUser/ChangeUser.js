@@ -12,16 +12,24 @@ import { InputLabel } from "@mui/material";
 import { Select } from "@mui/material";
 import { getUsersFromBoard, saveChangeUser } from "../../api/apiCalls";
 import { useSelector, useDispatch } from "react-redux";
-import { setUserChangeUserForm, setOpenChangeUserDialog } from "../../store";
+import {
+  setUserChangeUserForm,
+  setOpenChangeUserDialog,
+  useChangeUserMutation,
+} from "../../store";
 
-export default function ChangeUser(props) {
-  const { task, changeUser, board } = props;
+export default function ChangeUser() {
+  const { board } = useSelector((state) => state.activeBoard);
+
+  const { task } = useSelector((state) => state.selectedTask);
 
   const [possibleUsers, setPossibleUsers] = React.useState([]);
 
   const { user } = useSelector((state) => state.changeUserForm);
   const { open } = useSelector((state) => state.changeUserDialog);
   const dispatch = useDispatch();
+
+  const [changeUser, result] = useChangeUserMutation();
 
   useEffect(() => {
     getUsersFromBoard(board.pk).then((result) => {
@@ -33,12 +41,12 @@ export default function ChangeUser(props) {
     dispatch(setUserChangeUserForm(task.fields.user));
   }, []);
 
-  const handleClose = () => {
-    changeUser(task.pk, user);
-    saveChangeUser(task.pk, user).then((result) => {
-      resetState();
-      dispatch(setOpenChangeUserDialog(false));
-    });
+  const handleClose = async () => {
+    let data = { task_id: task.pk, newUser: user };
+    let newUser = await changeUser(data);
+
+    resetState();
+    dispatch(setOpenChangeUserDialog(false));
   };
   const handleUserChange = (e) => {
     dispatch(setUserChangeUserForm(e.target.value));

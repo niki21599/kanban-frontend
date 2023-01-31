@@ -15,11 +15,14 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import { getBoards } from "../../api/apiCalls";
 import { useSelector, useDispatch } from "react-redux";
-import { toggleOpenStartDrawer } from "../../store";
+import { setActiveBoard, toggleOpenStartDrawer } from "../../store";
+import { useFetchBoardsQuery } from "../../store";
 
 export default function Navbar(props) {
   let { openDrawer } = useSelector((state) => state.startDrawer);
   let dispatch = useDispatch();
+
+  let { data, isFetching, error } = useFetchBoardsQuery();
 
   let toggleDrawer = () => {
     dispatch(toggleOpenStartDrawer());
@@ -29,30 +32,48 @@ export default function Navbar(props) {
     props.logout();
   };
 
+  let drawerContent;
+  if (isFetching) {
+    drawerContent = <div>Loading</div>;
+  } else if (error) {
+    drawerContent = <div>error</div>;
+  } else {
+    drawerContent = data.map((board) => (
+      <div key={board.pk}>
+        <ListItem key={board.pk} disablePadding>
+          <ListItemButton onClick={() => openBoard(board)}>
+            <ListItemText
+              primary={board.fields.name}
+              sx={{ color: "rgb(0,0,0)" }}
+            />
+          </ListItemButton>
+        </ListItem>
+        <Divider />
+      </div>
+    ));
+  }
+
   useEffect(() => {
-    if (props.loggedIn) {
-      getBoards().then((result) => {
-        props.setBoards(result);
-        if (result.length > 0) {
-          let board = localStorage.getItem("board");
-          let board_json = JSON.parse(board);
-          if (board_json) {
-            props.handleChange(JSON.parse(board));
-          } else {
-            props.handleChange(result[0]);
-          }
-        } else {
-          props.setBoard({});
-        }
-      });
-    }
+    // if (props.loggedIn) {
+    //   getBoards().then((result) => {
+    //     props.setBoards(result);
+    //     if (result.length > 0) {
+    //       let board = localStorage.getItem("board");
+    //       let board_json = JSON.parse(board);
+    //       if (board_json) {
+    //         //props.handleChange(JSON.parse(board));
+    //       } else {
+    //         //props.handleChange(result[0]);
+    //       }
+    //     } else {
+    //       //props.setBoard({});
+    //     }
+    //   });
+    // }
   }, [props.loggedIn]);
 
-  let openBoard = (id) => {
-    // Load Board and Tasks and display it with given id
-    let [board] = props.boards.filter((board) => board.pk === id);
-
-    props.handleChange(board);
+  let openBoard = (board) => {
+    dispatch(setActiveBoard(board));
   };
 
   return (
@@ -89,19 +110,7 @@ export default function Navbar(props) {
                       Meine Boards
                     </Typography>
                     <Divider />
-                    {props.boards.map((board) => (
-                      <div key={board.pk}>
-                        <ListItem key={board.pk} disablePadding>
-                          <ListItemButton onClick={() => openBoard(board.pk)}>
-                            <ListItemText
-                              primary={board.fields.name}
-                              sx={{ color: "rgb(0,0,0)" }}
-                            />
-                          </ListItemButton>
-                        </ListItem>
-                        <Divider />
-                      </div>
-                    ))}
+                    {drawerContent}
                   </List>
                 </Box>
               </SwipeableDrawer>
