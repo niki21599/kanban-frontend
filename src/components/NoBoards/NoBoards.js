@@ -3,37 +3,20 @@ import React from "react";
 import AddBoard from "../AddBoard/AddBoard";
 import { Button } from "@mui/material";
 import { Card, Typography } from "@mui/material";
-import CircularProgress from "@mui/material/CircularProgress";
-import Box from "@mui/material/Box";
-import { useDispatch, useSelector } from "react-redux";
+
+import { useDispatch } from "react-redux";
 import { setOpenAddBoardDialog } from "../../store";
 
 export default function NoBoards(props) {
-  const [loading, setLoading] = React.useState(true);
-
   const dispatch = useDispatch();
 
   let openAddBoardDialog = () => {
     dispatch(setOpenAddBoardDialog(true));
   };
 
-  setTimeout(() => {
-    setLoading(false);
-  }, 300);
-
   return (
     <div>
-      {loading ? (
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <CircularProgress />
-        </Box>
-      ) : (
+      {
         <div>
           <Card
             sx={{
@@ -56,13 +39,9 @@ export default function NoBoards(props) {
               Add Board
             </Button>
           </Card>
-
-          <AddBoard
-            addBoard={props.addBoard}
-            changeBoard={props.changeBoard}
-          ></AddBoard>
+          <AddBoard />
         </div>
-      )}
+      }
     </div>
   );
 }

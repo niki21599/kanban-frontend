@@ -27,9 +27,9 @@ import {
 
 export default function TaskDetail() {
   const { task } = useSelector((state) => state.selectedTask);
-  const [name, setName] = useState(""); // ok
-
+  const [name, setName] = useState(""); // Extra Slice nicht notwendig!
   let { open } = useSelector((state) => state.taskDetailDialog);
+
   let dispatch = useDispatch();
 
   useEffect(() => {
@@ -102,7 +102,6 @@ export default function TaskDetail() {
           className="move-responsive"
           variant="extended"
           sx={{ position: "absolute", left: "105%", top: "180px" }}
-          //sx={{ position: "absolute", top: "-60px", left: "185px" }}
           onClick={handleCatOpen}
         >
           <ArrowForwardIcon sx={{ mr: 1 }} />
@@ -147,25 +146,4 @@ export default function TaskDetail() {
       </Dialog>
     </div>
   );
-}
-{
-  /* <IconButton
-        aria-label="close"
-        onClick={handleClose}
-        sx={{
-          position: "absolute",
-          right: 8,
-          top: 8,
-          color: (theme) => theme.palette.grey[500],
-        }}
-      >
-        <CloseIcon />
-      </IconButton>
-      <DialogTitle>{task.title}</DialogTitle>
-      <DialogContent>
-        <DialogContentText>{task.urgency}</DialogContentText>
-        <DialogContentText>{task.user}</DialogContentText>
-        <DialogContentText>{task.category}</DialogContentText>
-        <DialogContentText>{task.description}</DialogContentText>
-      </DialogContent> */
 }

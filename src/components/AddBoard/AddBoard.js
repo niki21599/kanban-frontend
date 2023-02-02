@@ -9,37 +9,31 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 
 import {
-  setActiveBoard,
   setNameAddBoardForm,
   setOpenAddBoardDialog,
   useAddBoardMutation,
 } from "../../store";
 import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 export default function AddBoard(props) {
   const { open } = useSelector((state) => state.addBoardDialog);
-
   let { name } = useSelector((state) => state.addBoardForm);
-  let dispatch = useDispatch();
   let { token } = useSelector((state) => state.loggedIn);
 
-  let [addBoard, addBoardResults] = useAddBoardMutation();
+  let navigate = useNavigate();
+  let navigateTo = (board_id) => navigate("/" + board_id);
+
+  let dispatch = useDispatch();
+  let [addBoard] = useAddBoardMutation();
 
   const handleClose = async () => {
     let { data } = await addBoard({ name, token });
     let newBoard = data[0];
-
-    dispatch(setActiveBoard(newBoard));
+    let board_id = newBoard.pk;
+    navigateTo(board_id);
     dispatch(setOpenAddBoardDialog(false));
     resetState();
-
-    // addBoard(name).then((result) => {
-    //   let [board] = result;
-    //   props.addBoard(board);
-    //   props.changeBoard(board);
-    //   dispatch(setOpenAddBoardDialog(false));
-    //   resetState();
-    // });
   };
 
   const handleCancel = () => {
@@ -53,6 +47,7 @@ export default function AddBoard(props) {
   const handleChange = (e) => {
     dispatch(setNameAddBoardForm(e.target.value));
   };
+
   return (
     <Dialog open={open} onClose={handleCancel}>
       <DialogTitle>Add Board</DialogTitle>

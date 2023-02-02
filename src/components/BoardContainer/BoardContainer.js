@@ -7,38 +7,35 @@ import Task from "../Task/Task";
 import AddTask from "../AddTask/AddTask";
 import { setCategoryAddTaskForm, setOpenAddTaskDialog } from "../../store";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  setSelectedTask,
-  setOpenTaskDetailDialog,
-  useChangeCategoryMutation,
-  useFetchTasksQuery,
-} from "../../store";
+import { useChangeCategoryMutation, useFetchTasksQuery } from "../../store";
 
 export default function BoardContainer(props) {
-  let dispatch = useDispatch();
   let { board } = useSelector((state) => state.activeBoard);
   let { currentDraggedElement } = useSelector((state) => state.draggedTask);
   let { token } = useSelector((state) => state.loggedIn);
-  let [changeCategory, results] = useChangeCategoryMutation();
+
+  let dispatch = useDispatch();
+  let [changeCategory] = useChangeCategoryMutation();
 
   let moveTo = async (category) => {
     let data = { task_id: currentDraggedElement, newCategory: category, token };
     await changeCategory(data);
   };
+
   let allowDrop = (event) => {
     event.preventDefault();
   };
 
-  let taskData = useFetchTasksQuery({
+  let { data, isFetching, error } = useFetchTasksQuery({
     board_id: board.pk,
     token,
   });
 
   let getTasksOfCategory = (cat) => {
-    if (taskData.isFetching || taskData.error) {
+    if (isFetching || error) {
       return [];
     } else {
-      let tasks = taskData.data.filter((task) => task.fields.category == cat);
+      let tasks = data.filter((task) => task.fields.category == cat);
       return tasks;
     }
   };
@@ -51,13 +48,12 @@ export default function BoardContainer(props) {
     <div className="boardContainer" id={props.title}>
       <div className="heading">
         <Typography align="left" variant="h5">
-          {" "}
-          {props.title}{" "}
-        </Typography>{" "}
+          {props.title}
+        </Typography>
         <IconButton className="whiteButton" onClick={handleAddTask}>
           <AddIcon />
-        </IconButton>{" "}
-      </div>{" "}
+        </IconButton>
+      </div>
       <div
         className="task-Section"
         onDrop={() => moveTo(props.title)}
@@ -65,9 +61,9 @@ export default function BoardContainer(props) {
       >
         {getTasksOfCategory(props.title).map((task) => (
           <Task task={task} key={task.pk} />
-        ))}{" "}
-      </div>{" "}
-      <AddTask category={props.title}></AddTask>{" "}
+        ))}
+      </div>
+      <AddTask category={props.title}></AddTask>
     </div>
   );
 }

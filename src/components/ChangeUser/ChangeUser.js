@@ -4,13 +4,11 @@ import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import MenuItem from "@mui/material/MenuItem";
 import { FormControl } from "@mui/material";
 import { InputLabel } from "@mui/material";
 import { Select } from "@mui/material";
-import { getUsersFromBoard, saveChangeUser } from "../../api/apiCalls";
 import { useSelector, useDispatch } from "react-redux";
 import {
   setUserChangeUserForm,
@@ -22,21 +20,17 @@ import {
 
 export default function ChangeUser() {
   const { board } = useSelector((state) => state.activeBoard);
-
   const { task } = useSelector((state) => state.selectedTask);
-  let { token } = useSelector((state) => state.loggedIn);
-
-  let { data, isFecthing, error } = useGetAddedUsersQuery({
-    board_id: board.pk,
-    token,
-  });
-
+  const { token } = useSelector((state) => state.loggedIn);
   const { user } = useSelector((state) => state.changeUserForm);
   const { open } = useSelector((state) => state.changeUserDialog);
 
+  let { data } = useGetAddedUsersQuery({
+    board_id: board.pk,
+    token,
+  });
   const dispatch = useDispatch();
-
-  const [changeUser, result] = useChangeUserMutation();
+  const [changeUser] = useChangeUserMutation();
 
   useEffect(() => {
     dispatch(setUserChangeUserForm(task.fields.user));
@@ -44,19 +38,22 @@ export default function ChangeUser() {
 
   const handleClose = async () => {
     let data = { task_id: task.pk, newUser: user, token };
-    let newUser = await changeUser(data);
+    await changeUser(data);
     dispatch(setTaskUser(user));
 
     resetState();
     dispatch(setOpenChangeUserDialog(false));
   };
+
   const handleUserChange = (e) => {
     dispatch(setUserChangeUserForm(e.target.value));
   };
+
   const handleCancel = () => {
     dispatch(setOpenChangeUserDialog(false));
     resetState();
   };
+
   const resetState = () => {
     dispatch(setUserChangeUserForm(task.fields.user));
   };

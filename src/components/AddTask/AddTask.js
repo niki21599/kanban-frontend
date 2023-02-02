@@ -11,8 +11,6 @@ import MenuItem from "@mui/material/MenuItem";
 import { FormControl } from "@mui/material";
 import { InputLabel } from "@mui/material";
 import { Select } from "@mui/material";
-import { addTask, getUsersFromBoard } from "../../api/apiCalls";
-import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   setCategoryAddTaskForm,
@@ -37,12 +35,12 @@ export default function AddTask(props) {
   let { token } = useSelector((state) => state.loggedIn);
 
   let { board } = useSelector((state) => state.activeBoard);
-  let { data, isFetching, error } = useGetAddedUsersQuery({
+  let { data } = useGetAddedUsersQuery({
     board_id: board.pk,
     token,
   });
   let dispatch = useDispatch();
-  let [addTask, results] = useAddTaskMutation();
+  let [addTask] = useAddTaskMutation();
 
   const handleClose = async () => {
     let taskWithToken = {
@@ -56,7 +54,7 @@ export default function AddTask(props) {
       token,
     };
 
-    let newTask = await addTask(taskWithToken);
+    await addTask(taskWithToken);
     dispatch(setOpenAddTaskDialog(false));
     dispatch(resetAddTaskForm());
   };
@@ -144,13 +142,13 @@ export default function AddTask(props) {
               id: "select-urgency",
             }}
           >
-            <MenuItem value="Nicht Dringend"> Nicht Dringend </MenuItem>{" "}
-            <MenuItem value="Dringend"> Dringend </MenuItem>{" "}
-            <MenuItem value="Sehr Dringend"> Sehr Dringend </MenuItem>{" "}
-          </Select>{" "}
-        </FormControl>{" "}
+            <MenuItem value="Nicht Dringend"> Nicht Dringend </MenuItem>
+            <MenuItem value="Dringend"> Dringend </MenuItem>
+            <MenuItem value="Sehr Dringend"> Sehr Dringend </MenuItem>
+          </Select>
+        </FormControl>
         <FormControl sx={{ mt: 2, mb: 2, minWidth: 250, width: "50%" }}>
-          <InputLabel htmlFor="select-user"> User </InputLabel>{" "}
+          <InputLabel htmlFor="select-user"> User </InputLabel>
           <Select
             autoFocus
             required
@@ -165,15 +163,14 @@ export default function AddTask(props) {
             {data
               ? data.map((user) => (
                   <MenuItem key={user.pk} value={user.pk}>
-                    {" "}
-                    {user.fields.first_name + " " + user.fields.last_name}{" "}
+                    {user.fields.first_name + " " + user.fields.last_name}
                   </MenuItem>
                 ))
-              : ""}{" "}
-          </Select>{" "}
-        </FormControl>{" "}
+              : ""}
+          </Select>
+        </FormControl>
         <FormControl sx={{ mt: 2, mb: 2, minWidth: 250, width: "50%" }}>
-          <InputLabel htmlFor="select-color"> Color </InputLabel>{" "}
+          <InputLabel htmlFor="select-color"> Color </InputLabel>
           <Select
             autoFocus
             required
@@ -185,14 +182,14 @@ export default function AddTask(props) {
               id: "select-color",
             }}
           >
-            <MenuItem value="red"> red </MenuItem>{" "}
-            <MenuItem value="blue"> blue </MenuItem>{" "}
-            <MenuItem value="green"> green </MenuItem>{" "}
-            <MenuItem value="yellow"> yellow </MenuItem>{" "}
-            <MenuItem value="orange"> orange </MenuItem>{" "}
-            <MenuItem value="white"> white </MenuItem>{" "}
-          </Select>{" "}
-        </FormControl>{" "}
+            <MenuItem value="red"> red </MenuItem>
+            <MenuItem value="blue"> blue </MenuItem>
+            <MenuItem value="green"> green </MenuItem>
+            <MenuItem value="yellow"> yellow </MenuItem>
+            <MenuItem value="orange"> orange </MenuItem>
+            <MenuItem value="white"> white </MenuItem>
+          </Select>
+        </FormControl>
         <TextField
           id="description"
           label="Description"
@@ -203,12 +200,12 @@ export default function AddTask(props) {
           fullWidth
           value={description}
           onChange={handleDescriptionChange}
-        />{" "}
-      </DialogContent>{" "}
+        />
+      </DialogContent>
       <DialogActions>
-        <Button onClick={handleCancel}> Cancel </Button>{" "}
-        <Button onClick={handleClose}> Add </Button>{" "}
-      </DialogActions>{" "}
+        <Button onClick={handleCancel}> Cancel </Button>
+        <Button onClick={handleClose}> Add </Button>
+      </DialogActions>
     </Dialog>
   );
 }

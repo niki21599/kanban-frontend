@@ -1,40 +1,31 @@
 import "./MainBoard.css";
 import React from "react";
-import AddButton from "../AddButton/AddButton.js";
-import { Typography } from "@mui/material";
-import BoardContainer from "../BoardContainer/BoardContainer";
-import TaskDetail from "../TaskDetail/TaskDetail";
-import { saveChangeCategory } from "../../api/apiCalls";
-
-import { Navigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import NoBoards from "../NoBoards/NoBoards";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  setOpenTaskDetailDialog,
-  setSelectedTask,
-  useChangeCategoryMutation,
-  useFetchTasksQuery,
-  setActiveBoard,
-  useFetchBoardsQuery,
-} from "../../store";
-import { useState } from "react";
+import { setActiveBoard, useFetchBoardsQuery } from "../../store";
 import { useNavigate } from "react-router-dom";
+import BoardDisplay from "../BoardDisplay/BoardDisplay";
+import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 
-function MainBoard(props) {
-  let categories = ["To do", "In progress", "Testing", "Done"];
+function MainBoard() {
+  let { token } = useSelector((state) => state.loggedIn);
+
   let { boardId } = useParams();
+
   let navigate = useNavigate();
   const navigateTo = (id) => navigate("/" + id);
 
-  let { board } = useSelector((state) => state.activeBoard);
-  let { token, loggedIn } = useSelector((state) => state.loggedIn);
   let dispatch = useDispatch();
-
   let boardData = useFetchBoardsQuery(token);
 
   let mainContent;
   if (boardData.isFetching) {
-    mainContent = <div> Loading</div>;
+    mainContent = (
+      <div>
+        <LoadingSpinner />
+      </div>
+    );
   } else if (boardData.error) {
     mainContent = <div>Error fetching Boards</div>;
   } else if (boardData.data.length > 0) {
@@ -46,29 +37,7 @@ function MainBoard(props) {
       navigateTo(boardData.data[0].pk);
     }
 
-    mainContent = (
-      <div>
-        {" "}
-        <div>
-          <AddButton />{" "}
-          <div className="mainContainer">
-            <div className="headlineContainer">
-              <Typography align="center" variant="h4">
-                {" "}
-                {board ? board.fields.name : "Board Name"}{" "}
-              </Typography>{" "}
-            </div>{" "}
-            <div className="board">
-              {" "}
-              {categories.map((cat) => {
-                return <BoardContainer key={cat} title={cat} />;
-              })}{" "}
-            </div>{" "}
-          </div>{" "}
-          <TaskDetail></TaskDetail>{" "}
-        </div>{" "}
-      </div>
-    );
+    mainContent = <BoardDisplay />;
   } else {
     mainContent = (
       <div>

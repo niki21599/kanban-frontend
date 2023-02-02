@@ -39,7 +39,6 @@ const boardsApi = createApi({
       }),
       addUsersToBoard: builder.mutation({
         query: (data) => {
-          console.log("Received: ", data);
           let formData = new FormData();
           formData.append("board_id", data.board_id);
           formData.append("user_ids", data.user_ids);

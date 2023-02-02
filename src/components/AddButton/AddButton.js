@@ -65,7 +65,7 @@ export default function AddButton(props) {
           />
         ))}{" "}
       </SpeedDial>{" "}
-      <AddBoard></AddBoard> <AddTask></AddTask> <AddUser></AddUser>{" "}
+      <AddBoard /> <AddTask /> <AddUser />{" "}
     </div>
   );
 }

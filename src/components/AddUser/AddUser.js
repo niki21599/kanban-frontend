@@ -9,24 +9,22 @@ import DialogTitle from "@mui/material/DialogTitle";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
-import { addUserToBoard, getUsersNotAddedToBoard } from "../../api/apiCalls";
 import { useSelector, useDispatch } from "react-redux";
 import { setOpenAddUserDialog, setCheckedAddUserForm } from "../../store";
 import {
   useAddUsersToBoardMutation,
   useGetNotAddedUsersQuery,
 } from "../../store";
+import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 
 export default function AddUser(props) {
   const { board } = useSelector((state) => state.activeBoard);
-  //const [possibleUsers, setPossibleUsers] = React.useState([]);
-
   const { open } = useSelector((state) => state.addUserDialog);
   const { checked } = useSelector((state) => state.addUserForm);
-  let { token } = useSelector((state) => state.loggedIn);
+  const { token } = useSelector((state) => state.loggedIn);
 
   const dispatch = useDispatch();
-  let [addUsersToBoard, results] = useAddUsersToBoardMutation();
+  let [addUsersToBoard] = useAddUsersToBoardMutation();
 
   let { data, isFetching, error } = useGetNotAddedUsersQuery({
     board_id: board.pk,
@@ -48,11 +46,8 @@ export default function AddUser(props) {
         user_ids.push(data[index].pk);
       }
     }
-
-    console.log("Data", board.pk, user_ids);
     let boardAndUser = { board_id: board.pk, user_ids, token };
     addUsersToBoard(boardAndUser);
-    //props.addUserToBoard(user_ids);
     dispatch(setOpenAddUserDialog(false));
     resetState();
   };
@@ -73,9 +68,13 @@ export default function AddUser(props) {
   };
 
   let usersList;
-
   if (isFetching) {
-    usersList = <div> Loading</div>;
+    usersList = (
+      <div>
+        {" "}
+        <LoadingSpinner />
+      </div>
+    );
   }
   if (error) {
     usersList = <div> Error </div>;
@@ -98,17 +97,17 @@ export default function AddUser(props) {
 
   return (
     <Dialog open={open} onClose={handleCancel}>
-      <DialogTitle> Add User </DialogTitle>{" "}
+      <DialogTitle> Add User </DialogTitle>
       <DialogContent>
         <DialogContentText>
-          Select the Users you would like to add.{" "}
-        </DialogContentText>{" "}
-        <FormGroup> {usersList} </FormGroup>{" "}
-      </DialogContent>{" "}
+          Select the Users you would like to add.
+        </DialogContentText>
+        <FormGroup> {usersList} </FormGroup>
+      </DialogContent>
       <DialogActions>
-        <Button onClick={handleCancel}> Cancel </Button>{" "}
-        <Button onClick={handleClose}> Add </Button>{" "}
-      </DialogActions>{" "}
+        <Button onClick={handleCancel}> Cancel </Button>
+        <Button onClick={handleClose}> Add </Button>
+      </DialogActions>
     </Dialog>
   );
 }

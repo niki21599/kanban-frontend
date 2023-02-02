@@ -9,7 +9,6 @@ import MenuItem from "@mui/material/MenuItem";
 import { FormControl } from "@mui/material";
 import { InputLabel } from "@mui/material";
 import { Select } from "@mui/material";
-import { saveChangeUrgency } from "../../api/apiCalls";
 import { useSelector, useDispatch } from "react-redux";
 import {
   setUrgencyChangeUrgencyForm,
@@ -21,13 +20,12 @@ import { useEffect } from "react";
 
 export default function ChangeUrgency() {
   const { task } = useSelector((state) => state.selectedTask);
-
   const { urgency } = useSelector((state) => state.changeUrgencyForm);
   const { open } = useSelector((state) => state.changeUrgencyDialog);
   let { token } = useSelector((state) => state.loggedIn);
-  const dispatch = useDispatch();
 
-  let [changeUrgency, result] = useChangeUrgencyMutation();
+  const dispatch = useDispatch();
+  let [changeUrgency] = useChangeUrgencyMutation();
 
   useEffect(() => {
     dispatch(setUrgencyChangeUrgencyForm(task.fields.urgency));
@@ -35,19 +33,22 @@ export default function ChangeUrgency() {
 
   const handleClose = async () => {
     let data = { task_id: task.pk, newUrgency: urgency, token };
-    let newUrgency = await changeUrgency(data);
+    await changeUrgency(data);
     dispatch(setTaskUrgency(urgency));
 
     dispatch(setOpenChangeUrgencyDialog(false));
     resetState();
   };
+
   const handleUrgencyChange = (e) => {
     dispatch(setUrgencyChangeUrgencyForm(e.target.value));
   };
+
   const handleCancel = () => {
     dispatch(setOpenChangeUrgencyDialog(false));
     resetState();
   };
+
   const resetState = () => {
     dispatch(setUrgencyChangeUrgencyForm(task.fields.urgency));
   };
