@@ -13,7 +13,7 @@ import AddBoard from "../AddBoard/AddBoard";
 import AddTask from "../AddTask/AddTask";
 import AddUser from "../AddUser/AddUser";
 import { useDispatch, useSelector } from "react-redux";
-import { setOpenAddUserDialog } from "../../store";
+import { setCategoryAddTaskForm, setOpenAddUserDialog } from "../../store";
 import { setOpenAddButtonDialog } from "../../store";
 import { setOpenAddBoardDialog } from "../../store";
 import { setOpenAddTaskDialog } from "../../store";
@@ -35,6 +35,7 @@ export default function AddButton(props) {
   const openDialog = (name) => {
     if (name === "New Task") {
       dispatch(setOpenAddTaskDialog(true));
+      dispatch(setCategoryAddTaskForm("To do"));
     }
     if (name === "Add User") {
       dispatch(setOpenAddUserDialog(true));
@@ -64,8 +65,7 @@ export default function AddButton(props) {
           />
         ))}{" "}
       </SpeedDial>{" "}
-      <AddBoard></AddBoard> <AddTask category="To do"></AddTask>{" "}
-      <AddUser></AddUser>{" "}
+      <AddBoard></AddBoard> <AddTask></AddTask> <AddUser></AddUser>{" "}
     </div>
   );
 }

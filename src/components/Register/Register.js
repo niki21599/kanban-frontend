@@ -20,6 +20,8 @@ import {
   setPasswordRepeatRegisterForm,
   setUsernameErrorRegisterForm,
   setUsernameRegisterForm,
+  useRegisterMutation,
+  login,
 } from "../../store";
 
 function Register(props) {
@@ -33,6 +35,10 @@ function Register(props) {
     lastName,
     firstName,
   } = useSelector((state) => state.registerForm);
+
+  let { loggedIn } = useSelector((state) => state.loggedIn);
+
+  let [register, result] = useRegisterMutation();
 
   let dispatch = useDispatch();
 
@@ -64,34 +70,57 @@ function Register(props) {
     dispatch(setPasswordErrorRegisterForm(false));
     dispatch(setUsernameErrorRegisterForm(false));
   };
-  let handleSubmit = (e) => {
+  let handleSubmit = async (e) => {
     e.preventDefault();
     // Register
-    register(
+
+    let result = await register({
       username,
       password,
       passwordRepeat,
       email,
       firstName,
-      lastName
-    ).then((result) => {
-      if (result.token) {
-        props.login(result.token);
-      } else if (result.errorMessage == "Username already exists") {
-        dispatch(setUsernameErrorRegisterForm(true));
-        dispatch(setPasswordRegisterForm(""));
-        dispatch(setPasswordRepeatRegisterForm(""));
-      } else if (result.errorMessage == "Passwords don't match") {
-        dispatch(setPasswordRegisterForm(""));
-        dispatch(setPasswordRepeatRegisterForm(""));
-        dispatch(setPasswordErrorRegisterForm(true));
-      }
+      lastName,
     });
+    console.log("The Answer", result);
+    if (result.data.token) {
+      dispatch(login(result.data.token));
+      localStorage.setItem("tokenKanban", result.data.token);
+    } else if (result.data.errorMessage == "Username already exists") {
+      dispatch(setUsernameErrorRegisterForm(true));
+      dispatch(setPasswordRegisterForm(""));
+      dispatch(setPasswordRepeatRegisterForm(""));
+    } else if (result.data.errorMessage == "Passwords don't match") {
+      dispatch(setPasswordRegisterForm(""));
+      dispatch(setPasswordRepeatRegisterForm(""));
+      dispatch(setPasswordErrorRegisterForm(true));
+    }
+
+    // register(
+    //   username,
+    //   password,
+    //   passwordRepeat,
+    //   email,
+    //   firstName,
+    //   lastName
+    // ).then((result) => {
+    //   if (result.token) {
+    //     props.login(result.token);
+    //   } else if (result.errorMessage == "Username already exists") {
+    //     dispatch(setUsernameErrorRegisterForm(true));
+    //     dispatch(setPasswordRegisterForm(""));
+    //     dispatch(setPasswordRepeatRegisterForm(""));
+    //   } else if (result.errorMessage == "Passwords don't match") {
+    //     dispatch(setPasswordRegisterForm(""));
+    //     dispatch(setPasswordRepeatRegisterForm(""));
+    //     dispatch(setPasswordErrorRegisterForm(true));
+    //   }
+    // });
   };
 
   return (
     <div>
-      {props.loggedIn ? (
+      {loggedIn ? (
         <Navigate to="/" />
       ) : (
         <Box

@@ -15,6 +15,7 @@ import {
   setUrgencyChangeUrgencyForm,
   setOpenChangeUrgencyDialog,
   useChangeUrgencyMutation,
+  setTaskUrgency,
 } from "../../store";
 import { useEffect } from "react";
 
@@ -23,6 +24,7 @@ export default function ChangeUrgency() {
 
   const { urgency } = useSelector((state) => state.changeUrgencyForm);
   const { open } = useSelector((state) => state.changeUrgencyDialog);
+  let { token } = useSelector((state) => state.loggedIn);
   const dispatch = useDispatch();
 
   let [changeUrgency, result] = useChangeUrgencyMutation();
@@ -32,8 +34,9 @@ export default function ChangeUrgency() {
   }, []);
 
   const handleClose = async () => {
-    let data = { task_id: task.pk, newUrgency: urgency };
+    let data = { task_id: task.pk, newUrgency: urgency, token };
     let newUrgency = await changeUrgency(data);
+    dispatch(setTaskUrgency(urgency));
 
     dispatch(setOpenChangeUrgencyDialog(false));
     resetState();

@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 let dummyTask = {
   fields: {
-    user: 1,
+    user: null,
     title: "hfjds",
     category: "hjfkd",
     urgency: "jkds",
@@ -17,9 +17,19 @@ let selectedTaskSlice = createSlice({
     setSelectedTask: (state, action) => {
       state.task = action.payload;
     },
+    setTaskCategory: (state, action) => {
+      state.task.fields.category = action.payload;
+    },
+    setTaskUrgency: (state, action) => {
+      state.task.fields.urgency = action.payload;
+    },
+    setTaskUser: (state, action) => {
+      state.task.fields.user = action.payload;
+    },
   },
 });
 
 export default selectedTaskSlice.reducer;
 
-export let { setSelectedTask } = selectedTaskSlice.actions;
+export let { setSelectedTask, setTaskCategory, setTaskUrgency, setTaskUser } =
+  selectedTaskSlice.actions;

@@ -16,20 +16,28 @@ import ListItemText from "@mui/material/ListItemText";
 import { getBoards } from "../../api/apiCalls";
 import { useSelector, useDispatch } from "react-redux";
 import { setActiveBoard, toggleOpenStartDrawer } from "../../store";
-import { useFetchBoardsQuery } from "../../store";
+import { useFetchBoardsQuery, logout } from "../../store";
+import { useNavigate } from "react-router-dom";
 
 export default function Navbar(props) {
   let { openDrawer } = useSelector((state) => state.startDrawer);
+  let { token, loggedIn } = useSelector((state) => state.loggedIn);
   let dispatch = useDispatch();
 
-  let { data, isFetching, error } = useFetchBoardsQuery();
+  let navigate = useNavigate();
+  let navigateTo = (id) => navigate("/" + id);
+
+  let { data, isFetching, error } = useFetchBoardsQuery(token);
 
   let toggleDrawer = () => {
     dispatch(toggleOpenStartDrawer());
   };
   let handleLogout = () => {
     // API Call needed ?
-    props.logout();
+    dispatch(logout({ token: null, loggedIn: false }));
+    let dummyBoard = { model: "", pk: -1, fields: { name: "hds" } };
+    dispatch(setActiveBoard(dummyBoard));
+    localStorage.clear();
   };
 
   let drawerContent;
@@ -53,34 +61,34 @@ export default function Navbar(props) {
     ));
   }
 
-  useEffect(() => {
-    // if (props.loggedIn) {
-    //   getBoards().then((result) => {
-    //     props.setBoards(result);
-    //     if (result.length > 0) {
-    //       let board = localStorage.getItem("board");
-    //       let board_json = JSON.parse(board);
-    //       if (board_json) {
-    //         //props.handleChange(JSON.parse(board));
-    //       } else {
-    //         //props.handleChange(result[0]);
-    //       }
-    //     } else {
-    //       //props.setBoard({});
-    //     }
-    //   });
-    // }
-  }, [props.loggedIn]);
+  // useEffect(() => {
+  //   // if (props.loggedIn) {
+  //   //   getBoards().then((result) => {
+  //   //     props.setBoards(result);
+  //   //     if (result.length > 0) {
+  //   //       let board = localStorage.getItem("board");
+  //   //       let board_json = JSON.parse(board);
+  //   //       if (board_json) {
+  //   //         //props.handleChange(JSON.parse(board));
+  //   //       } else {
+  //   //         //props.handleChange(result[0]);
+  //   //       }
+  //   //     } else {
+  //   //       //props.setBoard({});
+  //   //     }
+  //   //   });
+  //   // }
+  // }, [props.loggedIn]);
 
   let openBoard = (board) => {
-    dispatch(setActiveBoard(board));
+    navigateTo(board.pk);
   };
 
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
-          {props.loggedIn ? (
+          {loggedIn ? (
             <React.Fragment key="left">
               <IconButton
                 size="large"
@@ -128,7 +136,7 @@ export default function Navbar(props) {
           >
             KanbanBoard
           </Typography>
-          {props.loggedIn ? (
+          {loggedIn ? (
             <Button onClick={handleLogout} color="inherit">
               Logout
             </Button>

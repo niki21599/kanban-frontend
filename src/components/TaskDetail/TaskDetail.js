@@ -33,7 +33,9 @@ export default function TaskDetail() {
   let dispatch = useDispatch();
 
   useEffect(() => {
-    getUserById(task.fields.user);
+    if (task.fields.user) {
+      getUserById(task.fields.user);
+    }
   });
 
   const handleClose = () => {

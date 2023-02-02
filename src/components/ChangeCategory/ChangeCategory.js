@@ -11,7 +11,7 @@ import { InputLabel } from "@mui/material";
 import { Select } from "@mui/material";
 import { saveChangeCategory } from "../../api/apiCalls";
 import { useSelector, useDispatch } from "react-redux";
-import { setCategoryChangeCategoryForm } from "../../store";
+import { setCategoryChangeCategoryForm, setTaskCategory } from "../../store";
 import { useEffect } from "react";
 import {
   setOpenChangeCategoryDialog,
@@ -22,6 +22,7 @@ export default function ChangeCategory() {
   const { task } = useSelector((state) => state.selectedTask);
 
   const { category } = useSelector((state) => state.changeCategoryForm);
+  let { token } = useSelector((state) => state.loggedIn);
 
   const { open } = useSelector((state) => state.changeCategoryDialog);
   const dispatch = useDispatch();
@@ -33,8 +34,9 @@ export default function ChangeCategory() {
   }, []);
 
   const handleClose = async () => {
-    let data = { task_id: task.pk, newCategory: category };
+    let data = { task_id: task.pk, newCategory: category, token };
     let newCategory = await changeCategory(data);
+    dispatch(setTaskCategory(category)); //um State zu aktualisieren
     resetState();
     dispatch(setOpenChangeCategoryDialog(false));
   };

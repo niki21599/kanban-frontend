@@ -34,18 +34,18 @@ export default function AddTask(props) {
   let { user, title, urgency, color, category, description } = useSelector(
     (state) => state.addTaskForm
   );
+  let { token } = useSelector((state) => state.loggedIn);
 
   let { board } = useSelector((state) => state.activeBoard);
-  let { data, isFetching, error } = useGetAddedUsersQuery(board.pk);
+  let { data, isFetching, error } = useGetAddedUsersQuery({
+    board_id: board.pk,
+    token,
+  });
   let dispatch = useDispatch();
   let [addTask, results] = useAddTaskMutation();
 
-  // useEffect(() => {
-  //   dispatch(setCategoryAddTaskForm(props.category));
-  // }, [props.category]);
-
   const handleClose = async () => {
-    let task = {
+    let taskWithToken = {
       title,
       urgency,
       category,
@@ -53,9 +53,10 @@ export default function AddTask(props) {
       board_id: board.pk,
       color,
       description,
+      token,
     };
 
-    let newTask = await addTask(task);
+    let newTask = await addTask(taskWithToken);
     dispatch(setOpenAddTaskDialog(false));
     dispatch(resetAddTaskForm());
   };

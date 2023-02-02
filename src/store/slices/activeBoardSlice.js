@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 let activeBoardSlice = createSlice({
-  initialState: { board: { model: "", pk: -1, fields: { name: "hds" } } },
+  initialState: { board: { model: "", pk: null, fields: { name: "hds" } } },
   name: "activeBoard",
   reducers: {
     setActiveBoard: (state, action) => {

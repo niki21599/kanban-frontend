@@ -21,11 +21,12 @@ export default function AddBoard(props) {
 
   let { name } = useSelector((state) => state.addBoardForm);
   let dispatch = useDispatch();
+  let { token } = useSelector((state) => state.loggedIn);
 
   let [addBoard, addBoardResults] = useAddBoardMutation();
 
   const handleClose = async () => {
-    let { data } = await addBoard(name);
+    let { data } = await addBoard({ name, token });
     let newBoard = data[0];
 
     dispatch(setActiveBoard(newBoard));

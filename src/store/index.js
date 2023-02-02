@@ -84,11 +84,15 @@ import taskDetailDialogReducer, {
 import activeBoardReducer, { setActiveBoard } from "./slices/activeBoardSlice";
 import selectedTaskReducer, {
   setSelectedTask,
+  setTaskCategory,
+  setTaskUrgency,
+  setTaskUser,
 } from "./slices/selectedTaskSlice";
 
 import draggedTaskReducer, {
   setCurrentDraggedElement,
 } from "./slices/draggedTaskSlice";
+import loggedInReducer, { login, logout } from "./slices/loggedInSlice";
 
 import { boardsApi } from "./apis/boardsApi";
 import { setupListeners } from "@reduxjs/toolkit/dist/query";
@@ -117,6 +121,7 @@ let store = configureStore({
     activeBoard: activeBoardReducer,
     selectedTask: selectedTaskReducer,
     draggedTask: draggedTaskReducer,
+    loggedIn: loggedInReducer,
     [boardsApi.reducerPath]: boardsApi.reducer,
     [tasksApi.reducerPath]: tasksApi.reducer,
   },
@@ -167,6 +172,11 @@ export {
   setActiveBoard,
   setSelectedTask,
   setCurrentDraggedElement,
+  login,
+  logout,
+  setTaskCategory,
+  setTaskUrgency,
+  setTaskUser,
 };
 
 export {
@@ -175,6 +185,9 @@ export {
   useAddUsersToBoardMutation,
   useGetAddedUsersQuery,
   useGetNotAddedUsersQuery,
+  useLoginMutation,
+  useRegisterMutation,
+  useAddGuestBoardsMutation,
 } from "./apis/boardsApi";
 export {
   useAddTaskMutation,

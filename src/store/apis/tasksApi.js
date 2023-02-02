@@ -1,7 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/dist/query/react";
 
-let token = "Token " + localStorage.getItem("token");
-
 let tasksApi = createApi({
   reducerPath: "tasks",
   baseQuery: fetchBaseQuery({
@@ -10,14 +8,14 @@ let tasksApi = createApi({
   endpoints(builder) {
     return {
       fetchTasks: builder.query({
-        query: (board_id) => {
+        query: (data) => {
           return {
             url: "task/",
             headers: {
-              Authorization: token,
+              Authorization: data.token,
             },
             params: {
-              board_id,
+              board_id: data.board_id,
             },
             method: "GET",
           };
@@ -28,19 +26,19 @@ let tasksApi = createApi({
             : ["Post"],
       }),
       addTask: builder.mutation({
-        query: (task) => {
+        query: (data) => {
           let formData = new FormData();
-          formData.append("title", task.title);
-          formData.append("urgency", task.urgency);
-          formData.append("category", task.category);
-          formData.append("user_id", task.user_id);
-          formData.append("board_id", task.board_id);
-          formData.append("color", task.color);
-          formData.append("description", task.description);
+          formData.append("title", data.title);
+          formData.append("urgency", data.urgency);
+          formData.append("category", data.category);
+          formData.append("user_id", data.user_id);
+          formData.append("board_id", data.board_id);
+          formData.append("color", data.color);
+          formData.append("description", data.description);
           return {
             url: "task/add/",
             headers: {
-              Authorization: token,
+              Authorization: data.token,
             },
             body: formData,
             method: "POST",
@@ -49,14 +47,14 @@ let tasksApi = createApi({
         invalidatesTags: ["Post"],
       }),
       deleteTask: builder.mutation({
-        query: (task_id) => {
+        query: (data) => {
           let formData = new FormData();
-          formData.append("task_id", task_id);
+          formData.append("task_id", data.task_id);
 
           return {
             url: "/delete/user/",
             headers: {
-              Authorization: token,
+              Authorization: data.token,
             },
             body: formData,
             method: "POST",
@@ -72,7 +70,7 @@ let tasksApi = createApi({
           return {
             url: "change/category/",
             headers: {
-              Authorization: token,
+              Authorization: data.token,
             },
             body: formData,
             method: "POST",
@@ -88,7 +86,7 @@ let tasksApi = createApi({
           return {
             url: "change/urgency/",
             headers: {
-              Authorization: token,
+              Authorization: data.token,
             },
             body: formData,
             method: "POST",
@@ -104,13 +102,12 @@ let tasksApi = createApi({
           return {
             url: "change/user/",
             headers: {
-              Authorization: token,
+              Authorization: data.token,
             },
             body: formData,
             method: "POST",
           };
         },
-        invalidatesTags: ["Post"],
       }),
     };
   },

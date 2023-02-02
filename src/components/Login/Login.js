@@ -13,12 +13,23 @@ import {
   setPasswordLoginForm,
   setUsernameLoginForm,
   setWrongDataLoginForm,
+  useAddGuestBoardsMutation,
+  useLoginMutation,
+  useRegisterMutation,
 } from "../../store";
 
 function Login(props) {
   let { username, password, wrongData } = useSelector(
     (state) => state.loginForm
   );
+
+  let { token } = useSelector((state) => state.loggedIn);
+
+  let [login] = useLoginMutation();
+  let [register] = useRegisterMutation();
+  let [addGuestBoards] = useAddGuestBoardsMutation();
+
+  let { loggedIn } = useSelector((state) => state.loggedIn);
 
   let dispatch = useDispatch();
 
@@ -35,10 +46,11 @@ function Login(props) {
   };
   let handleSubmit = (e) => {
     e.preventDefault();
+    let userData = { username, password };
 
-    login(username, password).then((result) => {
-      if (result.token) {
-        props.login(result.token);
+    login(userData).then((result) => {
+      if (result.data.token) {
+        props.login(result.data.token);
       } else {
         dispatch(setUsernameLoginForm(""));
         dispatch(setPasswordLoginForm(""));
@@ -52,16 +64,20 @@ function Login(props) {
     let username = "Mustermann" + number.toString();
     let firstName = getFirstname();
     let lastName = getLastname();
-    register(username, "123456", "123456", "x@gmail.com", firstName, lastName)
-      .then((result) => {
-        if (result.token) {
-          props.login(result.token);
-        }
-      })
-      .then(() => {
-        console.log("Add Guest Boards");
-        addGuestBoards();
-      });
+    register({
+      username,
+      firstName,
+      lastName,
+      password: "123456",
+      passwordRepeat: "123456",
+      email: "x@gmail.com",
+    }).then((result) => {
+      if (result.data.token) {
+        addGuestBoards("Token " + result.data.token).then(() =>
+          props.login(result.data.token)
+        );
+      }
+    });
   };
 
   let getRandomNumber = () => {
@@ -104,7 +120,7 @@ function Login(props) {
 
   return (
     <div>
-      {!props.loggedIn ? (
+      {!loggedIn ? (
         <Box
           sx={{
             marginTop: 4,

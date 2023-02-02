@@ -23,11 +23,15 @@ export default function AddUser(props) {
 
   const { open } = useSelector((state) => state.addUserDialog);
   const { checked } = useSelector((state) => state.addUserForm);
+  let { token } = useSelector((state) => state.loggedIn);
 
   const dispatch = useDispatch();
   let [addUsersToBoard, results] = useAddUsersToBoardMutation();
 
-  let { data, isFetching, error } = useGetNotAddedUsersQuery(board.pk);
+  let { data, isFetching, error } = useGetNotAddedUsersQuery({
+    board_id: board.pk,
+    token,
+  });
 
   useEffect(() => {
     if (data) {
@@ -46,7 +50,7 @@ export default function AddUser(props) {
     }
 
     console.log("Data", board.pk, user_ids);
-    let boardAndUser = { board_id: board.pk, user_ids };
+    let boardAndUser = { board_id: board.pk, user_ids, token };
     addUsersToBoard(boardAndUser);
     //props.addUserToBoard(user_ids);
     dispatch(setOpenAddUserDialog(false));

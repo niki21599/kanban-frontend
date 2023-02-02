@@ -1,7 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-let token = "Token " + localStorage.getItem("token");
-
 const boardsApi = createApi({
   reducerPath: "boards",
   baseQuery: fetchBaseQuery({
@@ -10,7 +8,7 @@ const boardsApi = createApi({
   endpoints(builder) {
     return {
       fetchBoards: builder.query({
-        query: () => {
+        query: (token) => {
           return {
             url: "board/",
             headers: {
@@ -25,13 +23,13 @@ const boardsApi = createApi({
             : ["Post"],
       }),
       addBoard: builder.mutation({
-        query: (name) => {
+        query: (data) => {
           let formData = new FormData();
-          formData.append("name", name);
+          formData.append("name", data.name);
           return {
             url: "board/add/",
             headers: {
-              Authorization: token,
+              Authorization: data.token,
             },
             body: formData,
             method: "POST",
@@ -40,16 +38,16 @@ const boardsApi = createApi({
         invalidatesTags: ["Post"],
       }),
       addUsersToBoard: builder.mutation({
-        query: (boardAndUser) => {
-          console.log("Received: ", boardAndUser);
+        query: (data) => {
+          console.log("Received: ", data);
           let formData = new FormData();
-          formData.append("board_id", boardAndUser.board_id);
-          formData.append("user_ids", boardAndUser.user_ids);
+          formData.append("board_id", data.board_id);
+          formData.append("user_ids", data.user_ids);
 
           return {
             url: "board/add/user/",
             headers: {
-              Authorization: token,
+              Authorization: data.token,
             },
             body: formData,
             method: "POST",
@@ -58,14 +56,14 @@ const boardsApi = createApi({
         invalidatesTags: ["Post", "User"],
       }),
       getAddedUsers: builder.query({
-        query: (board_id) => {
+        query: (data) => {
           return {
             url: "task/user/",
             headers: {
-              Authorization: token,
+              Authorization: data.token,
             },
             params: {
-              board_id,
+              board_id: data.board_id,
             },
             method: "GET",
           };
@@ -76,14 +74,14 @@ const boardsApi = createApi({
             : ["User"],
       }),
       getNotAddedUsers: builder.query({
-        query: (board_id) => {
+        query: (data) => {
           return {
             url: "board/user/",
             headers: {
-              Authorization: token,
+              Authorization: data.token,
             },
             params: {
-              board_id,
+              board_id: data.board_id,
             },
             method: "GET",
           };
@@ -92,6 +90,46 @@ const boardsApi = createApi({
           result
             ? [...result.map(({ id }) => ({ type: "User", id })), "User"]
             : ["User"],
+      }),
+      login: builder.mutation({
+        query: (data) => {
+          let formData = new FormData();
+          formData.append("username", data.username);
+          formData.append("password", data.password);
+          return {
+            url: "login/",
+            body: formData,
+            method: "POST",
+          };
+        },
+        invalidatesTags: ["Post"],
+      }),
+      register: builder.mutation({
+        query: (data) => {
+          let formData = new FormData();
+          formData.append("username", data.username);
+          formData.append("password", data.password);
+          formData.append("password_repeat", data.passwordRepeat);
+          formData.append("email", data.email);
+          formData.append("first_name", data.firstName);
+          formData.append("last_name", data.lastName);
+          return {
+            url: "register/",
+            body: formData,
+            method: "POST",
+          };
+        },
+      }),
+      addGuestBoards: builder.mutation({
+        query: (token) => {
+          return {
+            url: "guestBoards/add/",
+            method: "POST",
+            headers: {
+              Authorization: token,
+            },
+          };
+        },
       }),
     };
   },
@@ -103,6 +141,9 @@ export const {
   useAddUsersToBoardMutation,
   useGetAddedUsersQuery,
   useGetNotAddedUsersQuery,
+  useLoginMutation,
+  useRegisterMutation,
+  useAddGuestBoardsMutation,
 } = boardsApi;
 
 export { boardsApi };

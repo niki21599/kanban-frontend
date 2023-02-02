@@ -17,9 +17,10 @@ export default function DeleteTask() {
   let { open } = useSelector((state) => state.deleteTaskDialog);
   let dispatch = useDispatch();
   let [deleteTask, result] = useDeleteTaskMutation();
+  let { token } = useSelector((state) => state.loggedIn);
 
   const handleClose = () => {
-    deleteTask(task.pk);
+    deleteTask({ task_id: task.pk, token });
 
     dispatch(setOpenDeleteTaskDialog(false));
     dispatch(setOpenTaskDetailDialog(false));

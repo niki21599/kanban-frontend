@@ -17,17 +17,23 @@ import {
   setOpenChangeUserDialog,
   useChangeUserMutation,
   useGetAddedUsersQuery,
+  setTaskUser,
 } from "../../store";
 
 export default function ChangeUser() {
   const { board } = useSelector((state) => state.activeBoard);
 
   const { task } = useSelector((state) => state.selectedTask);
+  let { token } = useSelector((state) => state.loggedIn);
 
-  let { data, isFecthing, error } = useGetAddedUsersQuery(board.pk);
+  let { data, isFecthing, error } = useGetAddedUsersQuery({
+    board_id: board.pk,
+    token,
+  });
 
   const { user } = useSelector((state) => state.changeUserForm);
   const { open } = useSelector((state) => state.changeUserDialog);
+
   const dispatch = useDispatch();
 
   const [changeUser, result] = useChangeUserMutation();
@@ -37,8 +43,9 @@ export default function ChangeUser() {
   }, []);
 
   const handleClose = async () => {
-    let data = { task_id: task.pk, newUser: user };
+    let data = { task_id: task.pk, newUser: user, token };
     let newUser = await changeUser(data);
+    dispatch(setTaskUser(user));
 
     resetState();
     dispatch(setOpenChangeUserDialog(false));

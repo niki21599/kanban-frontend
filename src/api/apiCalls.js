@@ -38,7 +38,7 @@ export async function register(
 }
 
 export async function getBoards() {
-  let token = "Token " + localStorage.getItem("token");
+  let token = "Token " + localStorage.getItem("tokenKanban");
 
   let response = await fetch("http://127.0.0.1:8000/board/", {
     method: "GET",
@@ -51,7 +51,7 @@ export async function getBoards() {
 }
 
 export async function getTasks(board_id) {
-  let token = "Token " + localStorage.getItem("token");
+  let token = "Token " + localStorage.getItem("tokenKanban");
 
   let response = await fetch(
     "http://127.0.0.1:8000/task/?board_id=" + board_id,
@@ -68,7 +68,7 @@ export async function getTasks(board_id) {
 }
 
 export async function addBoard(name) {
-  let token = "Token " + localStorage.getItem("token");
+  let token = "Token " + localStorage.getItem("tokenKanban");
 
   let formData = new FormData();
   formData.append("name", name);
@@ -94,7 +94,7 @@ export async function addTask(
   color,
   description
 ) {
-  let token = "Token " + localStorage.getItem("token");
+  let token = "Token " + localStorage.getItem("tokenKanban");
 
   let formData = new FormData();
   formData.append("title", title);
@@ -118,7 +118,7 @@ export async function addTask(
 }
 
 export async function addUserToBoard(board_id, user_ids) {
-  let token = "Token " + localStorage.getItem("token");
+  let token = "Token " + localStorage.getItem("tokenKanban");
 
   let formData = new FormData();
   formData.append("board_id", board_id);
@@ -137,7 +137,7 @@ export async function addUserToBoard(board_id, user_ids) {
 }
 
 export async function getUsersFromBoard(board_id) {
-  let token = "Token " + localStorage.getItem("token");
+  let token = "Token " + localStorage.getItem("tokenKanban");
 
   let response = await fetch(
     "http://127.0.0.1:8000/task/user/?board_id=" + board_id,
@@ -154,7 +154,7 @@ export async function getUsersFromBoard(board_id) {
 }
 
 export async function getUsersNotAddedToBoard(board_id) {
-  let token = "Token " + localStorage.getItem("token");
+  let token = "Token " + localStorage.getItem("tokenKanban");
 
   let response = await fetch(
     "http://127.0.0.1:8000/board/user/?board_id=" + board_id,
@@ -171,7 +171,7 @@ export async function getUsersNotAddedToBoard(board_id) {
 }
 
 export async function removeUserFromBoard() {
-  let token = "Token " + localStorage.getItem("token");
+  let token = "Token " + localStorage.getItem("tokenKanban");
 
   let formData = new FormData();
   formData.append("board_id", 3);
@@ -190,7 +190,7 @@ export async function removeUserFromBoard() {
 }
 
 export async function getUser(user_id) {
-  let token = "Token " + localStorage.getItem("token");
+  let token = "Token " + localStorage.getItem("tokenKanban");
 
   let response = await fetch(
     "http://127.0.0.1:8000/get/user/?user_id=" + user_id,
@@ -207,7 +207,7 @@ export async function getUser(user_id) {
 }
 
 export async function saveChangeCategory(task_id, newCategory) {
-  let token = "Token " + localStorage.getItem("token");
+  let token = "Token " + localStorage.getItem("tokenKanban");
   let formData = new FormData();
   formData.append("task_id", task_id);
   formData.append("newCategory", newCategory);
@@ -223,7 +223,7 @@ export async function saveChangeCategory(task_id, newCategory) {
   let result = await response.json();
 }
 export async function saveChangeUrgency(task_id, newUrgency) {
-  let token = "Token " + localStorage.getItem("token");
+  let token = "Token " + localStorage.getItem("tokenKanban");
   let formData = new FormData();
   formData.append("task_id", task_id);
   formData.append("newUrgency", newUrgency);
@@ -240,7 +240,7 @@ export async function saveChangeUrgency(task_id, newUrgency) {
 }
 
 export async function saveChangeUser(task_id, newUser) {
-  let token = "Token " + localStorage.getItem("token");
+  let token = "Token " + localStorage.getItem("tokenKanban");
   let formData = new FormData();
   formData.append("task_id", task_id);
   formData.append("newUser", newUser);
@@ -256,7 +256,7 @@ export async function saveChangeUser(task_id, newUser) {
 }
 
 export async function deleteTask(task_id) {
-  let token = "Token " + localStorage.getItem("token");
+  let token = "Token " + localStorage.getItem("tokenKanban");
   let formData = new FormData();
   formData.append("task_id", task_id);
 
@@ -270,7 +270,7 @@ export async function deleteTask(task_id) {
 }
 
 export async function addGuestBoards(name) {
-  let token = "Token " + localStorage.getItem("token");
+  let token = "Token " + localStorage.getItem("tokenKanban");
 
   let response = await fetch("http://127.0.0.1:8000/guestBoards/add/", {
     method: "POST",
