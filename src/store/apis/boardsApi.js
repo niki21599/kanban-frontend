@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 const boardsApi = createApi({
   reducerPath: "boards",
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://34.147.74.31/",
+    baseUrl: "https://kanban.niklasburg-kanban.de/",
   }),
   endpoints(builder) {
     return {
