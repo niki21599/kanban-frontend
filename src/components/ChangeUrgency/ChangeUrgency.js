@@ -60,7 +60,7 @@ export default function ChangeUrgency() {
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
     >
-      <DialogTitle id="alert-dialog-title">Change User</DialogTitle>
+      <DialogTitle id="alert-dialog-title">Change Urgency</DialogTitle>
       <DialogContent>
         <FormControl sx={{ mt: 2, minWidth: 250 }}>
           <InputLabel htmlFor="select-urgency">Urgency</InputLabel>
